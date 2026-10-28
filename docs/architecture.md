@@ -63,7 +63,7 @@ A certstream client is included as an alternative source and a replay source for
    typo permutations of distinctive brands (`dubaipolce`, `emiratspost`), Damerau-Levenshtein near-misses, lure keywords
    (`fine`, `refund`, `redelivery`, `mukhalafat`…), government cues (`gov`, `uae`, `dubai`, `ae`…), abuse-prone TLD.
    A brand together with a keyword/cue gets a combination bonus.
-4. *Score* capped at 100; `>= 35` is a candidate. Every point carries a reason string shown in the UI.
+4. *Score* capped at 100; `>= 40` is a candidate (configurable). Every point carries a reason string shown in the UI.
 
 **Reactive inputs** (`sensing/reports.py`): forwarded SMS/WhatsApp/e-mail, bank/telecom submissions and threat feeds go
 through the same verification. URLs are extracted even when defanged (`hxxps://x[.]com`), the reporter's number is masked

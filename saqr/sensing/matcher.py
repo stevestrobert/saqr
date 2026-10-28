@@ -61,7 +61,7 @@ def typo_permutations(word: str) -> set[str]:
 
 
 class LookalikeMatcher:
-    def __init__(self, registry: Registry | None = None, threshold: int = 35) -> None:
+    def __init__(self, registry: Registry | None = None, threshold: int = 40) -> None:
         self.registry = registry or get_registry()
         self.threshold = threshold
         self.vocab = self.registry.vocabulary
@@ -206,7 +206,10 @@ class LookalikeMatcher:
                 reasons.append(MatchReason(kind="gov_cue", weight=W_CUE, detail=f"government cue '{t}'"))
         cue_weight = min(cue_weight, W_CUE_CAP)
 
-        if brand_hits and (kw_weight or cue_weight):
+        # Combination bonus: a brand next to payment vocabulary (or a government cue). A short, ambiguous brand
+        # ('tax', 'rta', 'moi') needs real payment vocabulary — 'portal.delta-tax.co.uk' is not a lure.
+        all_ambiguous = brand_hits and all(reg.is_ambiguous(b) for b in brand_hits)
+        if brand_hits and (kw_weight or (cue_weight and not all_ambiguous)):
             reasons.append(MatchReason(kind="combo", weight=W_COMBO,
                                        detail="brand combined with payment vocabulary / government cue"))
 
@@ -269,5 +272,5 @@ class LookalikeMatcher:
 
 
 @lru_cache
-def get_matcher(threshold: int = 35) -> LookalikeMatcher:
+def get_matcher(threshold: int = 40) -> LookalikeMatcher:
     return LookalikeMatcher(threshold=threshold)

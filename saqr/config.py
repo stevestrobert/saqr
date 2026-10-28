@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     ct_batch_size: int = 256
     certstream_url: str = "wss://certstream.calidog.io"
     replay_rate: float = Field(default=18.0, description="Synthetic benign certificates per second in replay mode")
-    match_threshold: int = Field(default=35, description="Look-alike score (0-100) that makes a name a candidate")
+    match_threshold: int = Field(default=40, description="Look-alike score (0-100) that makes a name a candidate")
     feed_buffer: int = 400
 
     # --- verification --------------------------------------------------------------------------

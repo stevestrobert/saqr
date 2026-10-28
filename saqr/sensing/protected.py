@@ -81,7 +81,21 @@ class Registry:
 
     @property
     def distinctive_brands(self) -> set[str]:
-        return {t for t in self.brand_tokens if not self.is_ambiguous(t) and len(t) >= 4}
+        """Brands worth typo / edit-distance matching: long enough, not ambiguous, and not merely a government cue
+        glued to another cue ('abudhabigov', 'uaegov') — those would pull in every 'abudhabi…' business name."""
+        return {t for t in self.brand_tokens if not self.is_ambiguous(t) and len(t) >= 4 and not self._cue_composed(t)}
+
+    def _cue_composed(self, token: str) -> bool:
+        cues = sorted(self.government_cues, key=len, reverse=True)
+        rest = token
+        while rest:
+            for c in cues:
+                if len(c) >= 2 and rest.startswith(c):
+                    rest = rest[len(c):]
+                    break
+            else:
+                return False
+        return True
 
     @property
     def vocabulary(self) -> set[str]:
