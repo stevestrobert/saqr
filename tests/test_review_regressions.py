@@ -37,6 +37,14 @@ def test_redirect_to_official_site_is_cloaking_not_exoneration():
     assert v2.label == VerdictLabel.official
 
 
+def test_short_brands_do_not_match_inside_ordinary_words():
+    m = LookalikeMatcher()
+    for d in ("kitchenrefund.net", "switchrefund.com", "pitchfees.com", "textilesrefund.net"):
+        assert not m.match(d).is_candidate, (d, m.match(d).tokens)
+    r = m.match("rtafinesrefund.xyz")  # fully covered chunk: the short brand still counts
+    assert r.is_candidate and "rta" in r.tokens
+
+
 def test_embedded_domain_test_is_bounded():
     m = LookalikeMatcher()
     for d in ("menu.ae.cdn-host.com", "abu.ae.hosting.net", "smarta.ae.pages.dev", "karta.ae-shop.com"):

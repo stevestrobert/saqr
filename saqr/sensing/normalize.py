@@ -95,12 +95,21 @@ def coarse_tokens(name: str) -> list[str]:
     return [t for t in _SPLIT_RE.split(name) if t]
 
 
-def segment(chunk: str, vocabulary: set[str], max_unknown_ratio: float = 0.34) -> list[str] | None:
+def segment(chunk: str, vocabulary: set[str], max_unknown_ratio: float = 0.34, min_piece: int = 2) -> list[str] | None:
     """Split a concatenated chunk ('rtafinesrefund') into vocabulary words ('rta','fines','refund').
 
     Dynamic programme minimising unknown characters then token count. Returns None when the best
     segmentation leaves too many unknown characters (the chunk is probably an unrelated word).
+    Short vocabulary pieces (< 4 letters, e.g. 'itc', 'rta') are only trusted when the whole chunk is
+    covered — otherwise 'kitchenrefund' would yield 'itc' + 'refund'.
     """
+    seg = _segment(chunk, vocabulary, max_unknown_ratio, min_piece)
+    if seg and any(len(p) < 4 for p in seg) and sum(len(p) for p in seg) < len(chunk):
+        seg = _segment(chunk, vocabulary, max_unknown_ratio, max(min_piece, 4))
+    return seg
+
+
+def _segment(chunk: str, vocabulary: set[str], max_unknown_ratio: float, min_piece: int) -> list[str] | None:
     n = len(chunk)
     if n == 0:
         return []
@@ -116,7 +125,7 @@ def segment(chunk: str, vocabulary: set[str], max_unknown_ratio: float = 0.34) -
             if best[j][0] == INF:
                 continue
             piece = chunk[j:i]
-            if piece in vocabulary and len(piece) >= 2:
+            if piece in vocabulary and len(piece) >= min_piece:
                 cands.append((best[j][0], best[j][1] + 1, best[j][2] + [piece]))
         # treat the single char chunk[i-1] as unknown
         if best[i - 1][0] != INF:

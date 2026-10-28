@@ -157,10 +157,18 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         reports = [r for r in (store.get(Report, rid) for rid in c.report_ids) if r]
         campaign = store.get(Campaign, c.campaign_id) if c.campaign_id else None
         reference = None
-        if c.verdict.visual:
-            ref = pipeline.gallery.get(c.verdict.visual[0].reference_id)
-            if ref:
-                reference = {"id": ref.id, "name": ref.name, "domain": ref.domain, "entity": ref.entity, "screenshot_url": f"/api/gallery/{ref.id}/screenshot"}
+        top = c.verdict.visual[0] if c.verdict.visual else None
+        ref = pipeline.gallery.get(top.reference_id) if top and top.similarity >= 0.6 else None
+        reason = "nearest official page by visual similarity"
+        if ref is None and cand and cand.match and cand.match.protected_domain:
+            # no layout match: show the page of the entity the name imitates, so the analyst still sees the real one
+            ref = pipeline.gallery.get(cand.match.protected_domain.replace(".", "-"))
+            reason = "official page of the imitated entity (no visual match)"
+        if ref is None and top:
+            ref = pipeline.gallery.get(top.reference_id)
+        if ref:
+            reference = {"id": ref.id, "name": ref.name, "domain": ref.domain, "entity": ref.entity,
+                         "screenshot_url": f"/api/gallery/{ref.id}/screenshot", "reason": reason}
         return {"summary": case_summary(c, store, cand, actions), "case": c, "candidate": cand, "evidence": evidence, "actions": actions,
                 "reports": reports, "campaign": campaign, "reference": reference, "capture_text_excerpt": c.capture.text[:1500],
                 "demo_site_url": _demo_site_url(pipeline, c.domain)}
