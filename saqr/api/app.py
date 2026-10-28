@@ -212,7 +212,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         try:
             case, actions = await pipeline.approve(case_id, body.actor, body.channels, body.note)
         except DispatchRefused as exc:
-            raise HTTPException(409, str(exc))
+            raise HTTPException(409, str(exc)) from exc
         return {"case": case_summary(case, store), "actions": actions}
 
     @app.post("/api/cases/{case_id}/dismiss")
@@ -221,7 +221,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         try:
             case = P(request).dismiss(case_id, body.actor, body.reason)
         except DispatchRefused as exc:
-            raise HTTPException(409, str(exc))
+            raise HTTPException(409, str(exc)) from exc
         return case_summary(case, S(request))
 
     @app.post("/api/cases/{case_id}/recheck")
@@ -262,7 +262,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         try:
             return P(request).ingest_url(body.url, Source(body.source), body.note)
         except ValueError as exc:
-            raise HTTPException(409, str(exc))
+            raise HTTPException(409, str(exc)) from exc
 
     @app.get("/api/campaigns")
     def campaigns(request: Request):
@@ -344,7 +344,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         try:
             return await _scenario(request).fire(body.step_id)
         except KeyError:
-            raise HTTPException(404, "unknown step")
+            raise HTTPException(404, "unknown step") from None
 
     # ------------------------------------------------------------------------------------------ websocket
     @app.websocket("/ws")
