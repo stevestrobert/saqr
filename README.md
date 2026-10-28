@@ -100,7 +100,8 @@ re-verify it offline with `saqr evidence verify <dir>` or with `sha256sum` and `
   hashed, identifiers in forwarded texts are scrubbed before storage, no citizen browsing data is touched.
 * **Access control:** the MVP has no authentication; the analyst identity on an approval is self-declared. A
   deployment sits behind the entity's SSO (UAE PASS for analysts) and a reverse proxy; the audit chain records whatever
-  identity the proxy asserts.
+  identity the proxy asserts. The isolated browser refuses internal targets (loopback, private and link-local
+  addresses, `.local`/`.internal` names, non-web ports) so reports cannot turn it into a scanner of the host network.
 
 ## Repository
 
@@ -110,7 +111,7 @@ saqr/data/       protected registry (official domains, brands, lure vocabulary),
 frontend/        React + TypeScript dashboard (Vite, Tailwind); compiled bundle in frontend/dist
 demo/            fixture sites (official replicas, scam clones, benign look-alikes, parked page) and scenario.yaml
 docs/            architecture, API contract, challenge mapping, metrics methodology, demo script
-tests/           85+ tests: matcher, CT leaf parsing (real log entries), forms/text, scoring, evidence, response, API
+tests/           90+ tests: matcher, CT leaf parsing (real log entries), forms/text, scoring, evidence, response, safety, API
 ```
 
 Further reading: [`docs/architecture.md`](docs/architecture.md) · [`docs/api.md`](docs/api.md) ·

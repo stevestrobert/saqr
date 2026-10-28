@@ -24,6 +24,7 @@ from .models import (
     Campaign,
     Candidate,
     CandidateStatus,
+    Capture,
     Case,
     CaseState,
     CertEntry,
@@ -50,6 +51,7 @@ from .serializers import case_summary
 from .verification.browser import BrowserCapturer
 from .verification.gallery import Gallery
 from .verification.logos import find_logos
+from .verification.safety import check_target
 from .verification.scoring import decide
 from .verification.visual import build_encoder, load_image
 
@@ -242,6 +244,10 @@ class Pipeline:
             if m.allowlisted:
                 self.audit.record("system", "report.url_allowlisted", report.id, url=url, entity=m.protected_entity)
                 continue
+            unsafe = check_target(url)
+            if unsafe:
+                self.audit.record("system", "report.url_refused", report.id, url=url, reason=unsafe)
+                continue
             cand = self.enqueue_candidate(dom, url, src, match=m, report=report, note=f"reported via {channel}")
             if cand.id not in report.candidate_ids:
                 report.candidate_ids.append(cand.id)
@@ -255,6 +261,9 @@ class Pipeline:
         if not url.startswith("http"):
             url = "https://" + url
         dom = domain_of(url)
+        reason = check_target(url)
+        if reason:
+            raise ValueError(f"refusing to verify {url}: {reason}")
         m = self.matcher.match(dom)
         if m.allowlisted:
             raise ValueError(f"{dom} is an official government property; nothing to verify")
@@ -296,7 +305,12 @@ class Pipeline:
         override = self.demo_hosts.get(cand.domain)
         self._stage(cand, "opening", "opening in an isolated browser (desktop + mobile)")
         out_dir = self.settings.captures_dir / cand.id / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S")
-        cap = await self.capturer.capture(cand.url, out_dir, domain=cand.domain, override_base=override, tag="capture")
+        unsafe = None if override else await asyncio.get_running_loop().run_in_executor(None, lambda: check_target(cand.url, resolve=True))
+        if unsafe:
+            cap = Capture(requested_url=cand.url, ok=False, error=f"refused: {unsafe}")
+            self.audit.record("system", "verification.refused", cand.id, domain=cand.domain, url=cand.url, reason=unsafe)
+        else:
+            cap = await self.capturer.capture(cand.url, out_dir, domain=cand.domain, override_base=override, tag="capture")
         cert = self.store.get(CertEntry, cand.cert_id) if cand.cert_id else None
         if override and cap.tls is None and cert:
             cap.tls = TlsInfo(issuer=cert.issuer, subject=f"CN={cand.domain}", valid_from=cert.not_before, valid_to=cert.not_after,

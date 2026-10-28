@@ -137,6 +137,15 @@ class BrowserCapturer:
         cap.duration_ms = int((time.time() - started) * 1000)
         return cap
 
+    async def _route_guard(self, route) -> None:
+        """Never let a suspect page (or its redirects) pull the browser onto internal addresses."""
+        from .safety import host_is_blocked
+
+        if host_is_blocked(urlparse(route.request.url).hostname or ""):
+            await route.abort()
+            return
+        await route.continue_()
+
     async def _route_override(self, route, override_base: str, domain: str) -> None:
         """Serve requests for a demo domain from a local directory (or an HTTP base URL) inside the browser."""
         req_url = route.request.url
@@ -191,6 +200,7 @@ class BrowserCapturer:
             await context.route("**/*", lambda route: asyncio.ensure_future(self._route_override(route, override_base, domain)))
             cap.resolved_via = "demo-override"
         else:
+            await context.route("**/*", lambda route: asyncio.ensure_future(self._route_guard(route)))
             cap.resolved_via = "dns"
         page_host = domain
         external: set[str] = set()
