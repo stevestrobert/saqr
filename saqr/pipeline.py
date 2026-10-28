@@ -82,6 +82,7 @@ class Pipeline:
         self.certs_seen = 0
         self.certs_candidates = 0
         self._rate_window: deque[float] = deque(maxlen=20000)
+        self._cert_event_window: deque[float] = deque(maxlen=64)
         self._tasks: list[asyncio.Task] = []
         self._running = False
         self.scenario: Any = None                     # set by the demo module
@@ -166,12 +167,28 @@ class Pipeline:
             entry.allowlisted = m.allowlisted
             entry.matched_domain = m.domain if (m.is_candidate or m.allowlisted) else None
         self.feed.appendleft(entry)
-        self.bus.publish("cert", entry, keep=False)
+        interesting = bool(m and (m.is_candidate or m.allowlisted))
+        if interesting or self._cert_event_allowed():
+            self.bus.publish("cert", entry, keep=False)
         if m and m.is_candidate and not m.allowlisted:
             self.certs_candidates += 1
             self.store.put(entry)
             return self.enqueue_candidate(m.domain, f"https://{m.domain}/", entry.source, match=m, cert=entry)
         return None
+
+    CERT_EVENTS_PER_SECOND = 30
+
+    def _cert_event_allowed(self) -> bool:
+        """The live feed can exceed 150 certificates/s; the dashboard ticker only needs a representative sample.
+        Candidates and allow-listed names are always published; background noise is rate-limited."""
+        now = time.time()
+        win = self._cert_event_window
+        while win and now - win[0] > 1.0:
+            win.popleft()
+        if len(win) >= self.CERT_EVENTS_PER_SECOND:
+            return False
+        win.append(now)
+        return True
 
     def enqueue_candidate(self, domain: str, url: str, source: Source, *, match: MatchResult | None = None,
                           cert: CertEntry | None = None, report: Report | None = None, note: str = "") -> Candidate:
