@@ -23,8 +23,11 @@ a.btn{display:inline-block;margin:10px 12px 0 0;padding:14px 22px;border-radius:
 a.btn.gold{background:#f2b544;color:#1a1200;border-color:#f2b544}small{display:block;margin-top:28px;color:#8593ab}code{font-family:ui-monospace,monospace}</style></head><body><main>
 <h1>SAQR <span>صقر</span></h1>
 <p>Early warning and one-click takedown for impersonated government financial services. hackathon.ae 2026 · Digital Trust &amp; Cyber-Secure Nation · NYU Abu Dhabi student team.</p>
-<a class="btn gold" href="/presentation/">Open the slide deck</a>
-<a class="btn" href="/presentation/SAQR-pitch.pdf">PDF</a>
+<a class="btn gold" href="/presentation/">Slide deck · 3 min</a>
+<a class="btn" href="/presentation/?full=1">Full deck · 13 slides</a>
+<a class="btn" href="/presentation/SAQR-pitch.pdf">PDF · 3 min</a>
+<a class="btn" href="/presentation/SAQR-pitch-full.pdf">PDF · full</a>
+<a class="btn" href="/presentation/script-3min.md">Script · 3 min</a>
 <a class="btn" href="/presentation/presenter-notes.md">Presenter notes</a>
 <a class="btn" href="https://github.com/stevestrobert/saqr">Source code</a>
 <small>Deck keys: → next · ← back · N presenter notes · F fullscreen. The live dashboard runs locally with <code>make demo</code>.</small>
@@ -37,15 +40,16 @@ def main() -> None:
         shutil.rmtree(OUT)
     deck = OUT / "presentation"
     deck.mkdir(parents=True)
-    for name in ("index.html", "presenter-notes.md"):
+    for name in ("index.html", "presenter-notes.md", "script-3min.md"):
         shutil.copy(HERE / name, deck / name)
     for folder in ("fonts", "img"):
         shutil.copytree(HERE / folder, deck / folder)
-    pdf = HERE / "SAQR-pitch.pdf"
-    if pdf.exists():
-        shutil.copy(pdf, deck / pdf.name)
-    else:
-        print("note: SAQR-pitch.pdf missing (run build.py --pdf first); the PDF link will 404", file=sys.stderr)
+    for name in ("SAQR-pitch.pdf", "SAQR-pitch-full.pdf"):
+        pdf = HERE / name
+        if pdf.exists():
+            shutil.copy(pdf, deck / pdf.name)
+        else:
+            print(f"note: {name} missing (run build.py --pdf [--full] first); its link will 404", file=sys.stderr)
     images = OUT / "images"
     images.mkdir()
     for name in ("evidence-report.png", "live-wall.png", "case.png", "approve-modal.png"):

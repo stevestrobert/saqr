@@ -119,11 +119,12 @@ Further reading: [`docs/architecture.md`](docs/architecture.md) · [`docs/api.md
 
 ## Pitch deck (web)
 
-`docs/presentation/index.html` is a self-contained web slide deck (open the file, or `http://localhost:8000/deck` while
-the node runs — then slide 11 embeds the live dashboard). Keys: `→`/`space`, `←`, `N` presenter notes, `F` fullscreen,
-`?` help. The presenter script with timing, the demo click-script and a Q&A crib is in
-[`docs/presentation/presenter-notes.md`](docs/presentation/presenter-notes.md). `make deck` renders slide previews;
-`make deck-pdf` exports a PDF. `make site` assembles a public static site (landing page, deck, PDF, notes) in `var/site`,
+`docs/presentation/index.html` is a self-contained web slide deck. It opens in the **3-minute cut** (7 slides; the
+word-for-word script is [`docs/presentation/script-3min.md`](docs/presentation/script-3min.md)); add `?full=1` for the
+13-slide version, whose presenter notes, demo click-script and Q&A crib are in
+[`docs/presentation/presenter-notes.md`](docs/presentation/presenter-notes.md). Served by the node at
+`http://localhost:8000/deck` the full version embeds the live dashboard on slide 11. Keys: `→`/`space`, `←`, `N`
+presenter notes, `F` fullscreen, `?` help. `make deck` renders slide previews; `make deck-pdf` exports both PDFs. `make site` assembles a public static site (landing page, deck, PDF, notes) in `var/site`,
 and `.github/workflows/pages.yml` deploys it to Cloudflare Pages on every push that touches `docs/` — set the repository
 secrets `CLOUDFLARE_API_TOKEN` (Pages: Edit) and `CLOUDFLARE_ACCOUNT_ID` to enable it.
 

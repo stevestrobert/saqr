@@ -28,6 +28,7 @@ jobs:
         run: |
           pip install "playwright>=1.63,<1.64"
           python docs/presentation/build.py --pdf
+          python docs/presentation/build.py --pdf --full
       - name: Assemble the site
         run: python docs/presentation/site.py
       - name: Secrets present?

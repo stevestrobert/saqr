@@ -34,8 +34,9 @@ frontend:         ## rebuild the dashboard bundle (needs Node 22)
 deck:             ## render slide previews of the web deck (docs/presentation/index.html); add --pdf for a PDF export
 	$(BIN)/python docs/presentation/build.py
 
-deck-pdf:         ## export the web deck to docs/presentation/SAQR-pitch.pdf
+deck-pdf:         ## export the web deck to docs/presentation/SAQR-pitch.pdf (3-minute cut) and SAQR-pitch-full.pdf
 	$(BIN)/python docs/presentation/build.py --pdf
+	$(BIN)/python docs/presentation/build.py --pdf --full
 
 site: deck-pdf    ## assemble the public static site (landing page, deck, PDF, notes) in var/site — deployed by .github/workflows/pages.yml
 	$(BIN)/python docs/presentation/site.py

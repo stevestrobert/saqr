@@ -19,7 +19,8 @@
   section.slide { position:absolute; inset:0; display:none; flex-direction:column; padding:84px 110px 90px; overflow:hidden;
     background: radial-gradient(1200px 700px at 85% -10%, rgba(242,181,68,.10), transparent 60%), radial-gradient(900px 600px at -10% 110%, rgba(96,165,250,.08), transparent 60%), var(--bg); }
   section.slide.active { display:flex; }
-  .notes { display:none; }
+  .notes, .notes-short { display:none; }
+  section.slide.off { display:none !important; }
 
   /* ---- type ------------------------------------------------------------------------------------- */
   .kicker { font-size:21px; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:16px; }
@@ -181,6 +182,7 @@
     <div class="hero-sub in" style="--d:.25s">Fake government payment pages — caught while they are being set up, blocked everywhere with one click.</div>
   </div>
   <div class="footer"><span>NYU Abu Dhabi student team</span><span>Challenge 6 · impersonation of government financial services</span></div>
+  <aside class="notes-short"><p>SAQR means falcon. It catches fake government payment pages while they are being set up, and lets one analyst block them everywhere with one click.</p></aside>
   <aside class="notes">
     <p>Open on the title while judges settle. One sentence: "SAQR means falcon. It spots a fake government payment page the moment a scammer sets it up, and lets one analyst block it everywhere with one click." Then move on — do not explain the ticker in the background; it is the live certificate feed, and we will come back to it.</p>
   </aside>
@@ -204,6 +206,7 @@
     <div class="stat"><div class="v gold">days</div><div class="l">online while registrar, host and telecoms are contacted one by one</div></div>
   </div>
   <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>2</span></div>
+  <aside class="notes-short"><p>Today a fake fines page is found after the money is gone. The scammer registers a look-alike name, gets a free certificate, sends an SMS wave, and victims type their card number, CVV and one-time code. Complaints arrive hours or days later, and takedown means calling the registrar, the host and the telecoms one by one. The page stays up for days.</p></aside>
   <aside class="notes">
     <p>Walk the chain left to right. A scammer registers a look-alike name, gets a free certificate in minutes, and sends the SMS wave. Victims type card number, CVV and the one-time code; the money moves immediately. Only then do complaints arrive — hours or days later — and that is where identification happens today. Takedown is manual and sequential: registrar, then host, then telecoms. Point at the three numbers: over 75 % of breaches start with phishing (Cyber Security Council), scam messages up 35 % in a year, and the fake stays online for days.</p>
   </aside>
@@ -228,13 +231,14 @@
     <div class="stat"><div class="v emerald">0 citizens</div><div class="l">no traffic taps, no phones, no browsing data</div></div>
   </div>
   <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>3</span></div>
+  <aside class="notes-short"><p>Our insight: scammers publish their own early warning. Every convincing fake needs HTTPS, and every certificate must be written to public Certificate Transparency logs before browsers trust it. So the look-alike name appears in a world-readable stream, usually before the first SMS goes out. SAQR reads that stream live — about 150 certificates a second from two Google logs in our tests — and a cheap, explainable filter keeps roughly one name in three thousand. Nothing touches citizens: no phones, no taps, only what the attacker publishes.</p></aside>
   <aside class="notes">
     <p>This is the whole idea in one picture. A convincing fake needs HTTPS, otherwise the browser says "Not secure". To get a certificate the scammer goes to a certificate authority, and every publicly trusted CA must write the certificate to public Certificate Transparency logs before Chrome and Safari accept it. The name travels along this path (watch the chip) and ends up in a stream anyone can read — usually before the first SMS goes out. SAQR reads that stream directly. In our tests two Google logs alone gave 150 certificates a second; the cheap name filter keeps about one in three thousand. And nothing touches citizens: no taps, no phones — only what the attacker publishes himself.</p>
   </aside>
 </section>
 
 <!-- 4 · Four stages -------------------------------------------------------------------------------- -->
-<section class="slide" data-title="Pipeline">
+<section class="slide" data-set="full" data-title="Pipeline">
   <div class="kicker in">How it works</div>
   <h1 class="in" style="--d:.05s">Sense · Assess · Qualify · Respond</h1>
   <div class="stages in" style="--d:.15s;margin-top:50px">
@@ -251,7 +255,7 @@
 </section>
 
 <!-- 5 · Sense (ticker demo) ------------------------------------------------------------------------- -->
-<section class="slide" data-title="Sense">
+<section class="slide" data-set="full" data-title="Sense">
   <div class="kicker in">Stage 1 · Sense</div>
   <h1 class="in" style="--d:.05s">150 certificates a second. One line each. The filter explains every point.</h1>
   <div class="cols in" style="--d:.15s;grid-template-columns:1.25fr .75fr;margin-top:10px">
@@ -286,15 +290,16 @@
     <div><div class="ring pop" style="--d:.8s"><b class="red" id="riskcounter">0</b><span>risk / 100</span></div><div style="text-align:center;margin-top:18px;font-size:20px;color:var(--ink3)">layout 93 %<br>emblem match<br><span style="font-size:16px">on demo fixtures</span></div></div>
     <div><div class="label"><i style="background:var(--red)"></i>Suspect · <span class="mono muted">rta-fines-refund.com</span> <span class="muted" style="font-weight:400">(demo clone)</span></div><div class="shot"><img src="img/clone-rta.png" alt="clone"><span class="badge pop" style="--d:1.4s;left:22px;top:22px">same emblem · same layout</span><span class="badge pop" style="--d:1.8s;left:22px;top:300px">“claim within 24 h”</span><span class="badge pop" style="--d:2.2s;left:22px;top:560px">card number · expiry · CVV · OTP</span></div></div>
   </div>
-  <div class="verdict in" style="--d:.5s"><span class="pill red">confirmed fake</span><span class="pill">layout copied</span><span class="pill">RTA emblem reused</span><span class="pill">collects card + OTP</span><span class="pill">certificate minutes old, free CA</span><span class="pill emerald">gym site with the same word → cleared</span></div>
+  <div class="verdict in" style="--d:.5s"><span class="pill red">confirmed fake</span><span class="pill">layout copied</span><span class="pill">RTA emblem reused</span><span class="pill">collects card + OTP</span><span class="pill">certificate minutes old, free CA</span><span class="pill emerald">gym site with the same word → cleared</span><span class="pill gold">evidence sealed automatically · hashes · Merkle root · timestamp</span></div>
   <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>6</span></div>
+  <aside class="notes-short"><p>Each candidate opens in a throw-away browser. SAQR compares it with the real page, finds the copied emblem, reads the text, and reads what the form asks for — official portals never ask for a card or an OTP on an inquiry page. Four signals fuse into a risk score with reasons in plain language: here 90 out of 100, confirmed fake. The same step clears false positives, like a gym with “rta” in its name. And the evidence package is sealed automatically: screenshots, code, DNS, certificate, hashes, Merkle root, trusted timestamp.</p></aside>
   <aside class="notes">
     <p>Left: the reference page from our gallery — in the demo this is a replica we built of the RTA fines page (original artwork, served on localhost); in deployment the gallery is built from live screenshots of the real portals. Right: the candidate, opened in a throw-away browser at desktop and phone size. Four independent signals: the layout matches at 93 % (perceptual encoder; structural similarity 0.74–0.78), the emblem is found by template matching, the text claims to be RTA with urgency cues, and the form asks for card number, expiry, CVV and the SMS one-time code — official portals hand off to a licensed gateway and never collect a card on an inquiry page. Fused risk 90 out of 100, confirmed fake, with reasons in plain language. The same stage clears false positives: a gym called rta-ae-fitness passes the name filter and is cleared here; parked names go into a re-check loop and are caught when they go live. The encoder is pluggable: DINOv3 when installed, a dependency-free perceptual encoder in this demo. If asked: these numbers are from our own fixture set, not from real scam pages yet.</p>
   </aside>
 </section>
 
 <!-- 7 · Qualify ------------------------------------------------------------------------------------ -->
-<section class="slide" data-title="Qualify">
+<section class="slide" data-set="full" data-title="Qualify">
   <div class="kicker in">Stage 3 · Qualify</div>
   <h1 class="in" style="--d:.05s">Evidence sealed automatically — in about a second</h1>
   <div class="cols in" style="--d:.15s;grid-template-columns:1fr 1fr;align-items:start">
@@ -339,6 +344,7 @@
     <div class="p" style="right:0;top:520px"><div class="t">Certificate authority</div><div class="d">revocation request</div><div class="st">acknowledged</div></div>
   </div>
   <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>8</span></div>
+  <aside class="notes-short"><p>Then one click. A named analyst approves, and the request fans out to seven partners at once: telecoms block the URL and filter the SMS, browsers warn, the registrar and host take the site down, banks freeze the accounts on the page, the CA revokes the certificate, aeCERT gets the incident. The safeguards are in code: official domains are allow-listed and re-checked at dispatch, nothing goes out without a human, and every step is in a hash-chained audit log.</p></aside>
   <aside class="notes">
     <p>The analyst sees the case, the evidence and the safeguards, types their name and clicks once. The request fans out to everyone at the same time: telecom operators via TDRA block the URL and filter the SMS pattern — that is what cuts exposure in seconds — browsers show a red warning, the registrar and host take the site down at the source, banks freeze the IBANs and wallets shown on the page, the CA revokes the certificate, aeCERT and the imitated entity get the incident. Every request carries the evidence hashes and comes back with a receipt. Two safeguards are enforced in code, not in the UI: the allow-list is re-checked server-side, and nothing is sent without a named human approval written to the hash-chained audit log. (The partner endpoints are simulated in this build; the payloads are real.)</p>
   </aside>
@@ -364,13 +370,14 @@
   </div>
   <p class="in" style="--d:.7s;font-size:21px;color:var(--ink3);margin-top:34px">Pipeline steps measured in the offline demo; with the live feed the clock starts at the public certificate timestamp, which anyone can recompute from the log entry in the evidence package. Partner acknowledgements are simulated. Baselines are documented assumptions, to be replaced by historical case data. Targets: −70 % and −50 %.</p>
   <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>9</span></div>
+  <aside class="notes-short"><p>In the demo the pipeline takes seconds to identify and about three minutes to block, including the human. Against a complaint-driven baseline of nine hours and a takedown baseline of forty-eight, that is far past the 70 and 50 percent targets. The baselines are assumptions we want to replace with your historical cases, and the partner connectors are simulated in this build.</p></aside>
   <aside class="notes">
     <p>Read this as a time budget, not a benchmark. The pipeline steps are measured in the offline demo: the name becomes a candidate within seconds of the certificate appearing, verification and evidence sealing take a few seconds more, the analyst took under three minutes to approve, and the telecom acknowledgement comes back a second later — that last one is simulated, say so. In the offline replay the certificate timestamps are synthetic (the feed stamps each certificate a few seconds before it is shown); with the live feed the clock starts at the real public log timestamp, so anyone can recompute time-to-identify from the log entry we store. Against a conservative complaint-driven baseline of nine hours and a takedown-only baseline of forty-eight hours, the challenge targets of 70 % and 50 % are met by construction — because today's delay is waiting for complaints and then waiting for takedowns, and SAQR removes both waits. Be upfront: the baselines are assumptions we will replace with the organisers' historical cases.</p>
   </aside>
 </section>
 
 <!-- 10 · Constraints ------------------------------------------------------------------------------- -->
-<section class="slide" data-title="Constraints">
+<section class="slide" data-set="full" data-title="Constraints">
   <div class="kicker in">Built for the constraints</div>
   <h1 class="in" style="--d:.05s">Identity, privacy, evidence, law — by design</h1>
   <div class="cons in" style="--d:.15s">
@@ -386,7 +393,7 @@
 </section>
 
 <!-- 11 · Live --------------------------------------------------------------------------------------- -->
-<section class="slide" data-title="Live demo">
+<section class="slide" data-set="full" data-title="Live demo">
   <div class="kicker in">Live</div>
   <h1 class="in" style="--d:.05s;font-size:54px;margin-bottom:16px">Watch it happen</h1>
   <div class="live in" style="--d:.15s" id="live">
@@ -400,7 +407,7 @@
 </section>
 
 <!-- 12 · Scope & next -------------------------------------------------------------------------------- -->
-<section class="slide" data-title="Scope">
+<section class="slide" data-set="full" data-title="Scope">
   <div class="kicker in">Honest scope · next 90 days</div>
   <h1 class="in" style="--d:.05s">What it does not do yet — and what comes next</h1>
   <div class="cols cols-2 in" style="--d:.15s;align-items:start;margin-top:10px">
@@ -444,6 +451,7 @@
     </div>
   </div>
   <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>13</span></div>
+  <aside class="notes-short"><p>Catch them while they set up. Block them everywhere with one click. We are asking for historical cases and an introduction to one telecom operator. Thank you.</p></aside>
   <aside class="notes">
     <p>Close with the one line: catch them while they set up, block them everywhere with one click. Then the ask: access to the organisers' historical cases to replace our baselines, and an introduction to TDRA and one telecom operator to wire the first real connector. Thank them — شكراً — and invite questions. Crib for Q&amp;A is in the presenter notes.</p>
   </aside>
@@ -459,12 +467,13 @@
 <div class="help" id="help">
   <div><kbd>→</kbd><kbd>space</kbd> next &nbsp; <kbd>←</kbd> previous &nbsp; <kbd>Home</kbd><kbd>End</kbd></div>
   <div><kbd>N</kbd> presenter notes &nbsp; <kbd>F</kbd> fullscreen &nbsp; <kbd>?</kbd> this help &nbsp; <kbd>Esc</kbd> close</div>
-  <div class="muted" style="margin-top:10px">Add <span class="mono">?demo=http://localhost:8000</span> to the URL to embed the live dashboard on slide 11.</div>
+  <div class="muted" style="margin-top:10px">This is the 3-minute cut (7 slides). Add <span class="mono">?full=1</span> to the URL for the 13-slide version, <span class="mono">?demo=http://localhost:8000</span> to embed the live dashboard on its demo slide.</div>
 </div>
 
 <script>
 (() => {
-  const slides = [...document.querySelectorAll('section.slide')];
+  const mode = /[?&]full/.test(location.search) ? 'full' : 'short';
+  const slides = [...document.querySelectorAll('section.slide')].filter(s => { const keep = !s.dataset.set || s.dataset.set === mode; s.classList.toggle('off', !keep); return keep; });
   const stage = document.getElementById('stage'), progress = document.getElementById('progress'), counter = document.getElementById('counter');
   const panel = document.getElementById('panel'), notes = document.getElementById('notes'), help = document.getElementById('help');
   let cur = -1, timers = [];
@@ -481,8 +490,9 @@
     history.replaceState(null, '', '#slide-' + (n + 1));
     counter.textContent = `${n + 1} / ${slides.length}`;
     progress.style.width = ((n + 1) / slides.length * 100) + '%';
-    const aside = slides[n].querySelector('.notes');
+    const aside = (mode === 'short' && slides[n].querySelector('.notes-short')) || slides[n].querySelector('.notes');
     notes.innerHTML = aside ? aside.innerHTML : '<p class="muted">—</p>';
+    const num = slides[n].querySelector('.footer > span:last-child'); if (num && /^\d+$/.test(num.textContent.trim())) num.textContent = n + 1;
     enter(slides[n]);
   }
   function fromHash() { const m = location.hash.match(/#(?:slide-|\/)?(\d+)$/); go(m ? parseInt(m[1], 10) - 1 : 0); }

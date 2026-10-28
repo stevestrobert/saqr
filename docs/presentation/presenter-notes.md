@@ -1,4 +1,7 @@
-# SAQR — presenter notes
+# SAQR — presenter notes (full 13-slide version)
+
+**For the 3-minute slot use [`script-3min.md`](script-3min.md)** — the deck opens in that 7-slide cut by default.
+This file is the long version: add `?full=1` to the deck URL to get all 13 slides.
 
 Deck: `docs/presentation/index.html` (open the file, or `http://localhost:8000/deck` when the node is running — then
 slide 11 embeds the live dashboard; `#slide-N` jumps to a slide). Keys: `→` / `space` next · `←` back · `N` notes panel · `F`
