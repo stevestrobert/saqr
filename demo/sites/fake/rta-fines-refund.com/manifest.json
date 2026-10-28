@@ -1,0 +1,14 @@
+{
+  "domain": "rta-fines-refund.com",
+  "kind": "fake",
+  "title": "Traffic Fines Refund",
+  "entity": "Roads and Transport Authority (Dubai)",
+  "entity_ar": "هيئة الطرق والمواصلات",
+  "service": "Traffic fines inquiry and payment",
+  "official_domain": "rta.ae",
+  "clone_of": "rta.ae",
+  "lure": "Refund of overpaid fine AED 320, claim within 24h",
+  "collects": ["full_name","emirates_id","mobile","card_number","expiry","cvv","otp"],
+  "iocs": {"whatsapp": ["+971 50 000 0001"]},
+  "notes": "Near-exact clone of official/rta.ae: identical header, brand-logo SVG, palette, nav and footer. Refund lure with 24h countdown; harvests card details and OTP (Step 2). WhatsApp IOC in footer and form."
+}

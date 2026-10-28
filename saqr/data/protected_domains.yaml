@@ -1,0 +1,281 @@
+# Protected registry: official UAE government financial-service properties.
+#
+# This list is the whitelist (nothing here, nor any subdomain of it, is ever flagged or blocked)
+# AND the brand vocabulary the look-alike matcher protects. Each entity lists:
+#   domains  - official registrable domains (allow-listed together with every subdomain)
+#   brands   - tokens that identify the entity inside a domain name. Tokens marked ambiguous are short or
+#              common (rta, moi, tax) and only count strongly together with a financial keyword / government cue.
+#   names    - English / Arabic names used by the page-text analyser
+#   services - what the entity collects money for (used by the lure lexicon and the demo scenario)
+#
+# Official suffixes below are allow-listed wholesale: a name under them cannot be registered by an attacker.
+official_suffixes: [gov.ae, mil.ae, ac.ae, sch.ae]
+
+entities:
+  - id: rta
+    name: Roads and Transport Authority (Dubai)
+    name_ar: هيئة الطرق والمواصلات
+    sector: transport
+    domains: [rta.ae, nol.ae]
+    brands: [rta, nol, rtadubai]
+    ambiguous: [rta, nol]
+    services: [traffic fines, parking fines, nol card top-up, vehicle registration renewal, driving licence renewal]
+  - id: salik
+    name: Salik (Dubai toll)
+    name_ar: سالك
+    sector: transport
+    domains: [salik.ae]
+    brands: [salik]
+    services: [toll recharge, toll statement, salik fines]
+  - id: dubaipolice
+    name: Dubai Police
+    name_ar: شرطة دبي
+    sector: police
+    domains: [dubaipolice.gov.ae]
+    brands: [dubaipolice, dubai-police]
+    services: [traffic fines, police clearance fees]
+  - id: adpolice
+    name: Abu Dhabi Police
+    name_ar: شرطة أبوظبي
+    sector: police
+    domains: [adpolice.gov.ae]
+    brands: [adpolice, abudhabipolice]
+    services: [traffic fines]
+  - id: shjpolice
+    name: Sharjah Police
+    name_ar: شرطة الشارقة
+    sector: police
+    domains: [shjpolice.gov.ae]
+    brands: [shjpolice, sharjahpolice]
+    services: [traffic fines]
+  - id: moi
+    name: Ministry of Interior
+    name_ar: وزارة الداخلية
+    sector: federal
+    domains: [moi.gov.ae]
+    brands: [moi, moiuae]
+    ambiguous: [moi]
+    services: [traffic fines, vehicle registration, driving licence]
+  - id: fta
+    name: Federal Tax Authority
+    name_ar: الهيئة الاتحادية للضرائب
+    sector: finance
+    domains: [tax.gov.ae, emaratax.gov.ae]
+    brands: [fta, emaratax, taxgov]
+    ambiguous: [fta, tax]
+    services: [VAT refund, tax payment, excise tax, tourist refund]
+  - id: mof
+    name: Ministry of Finance
+    name_ar: وزارة المالية
+    sector: finance
+    domains: [mof.gov.ae]
+    brands: [mof, edirham, e-dirham]
+    ambiguous: [mof]
+    services: [e-Dirham payments, federal fees]
+  - id: emiratespost
+    name: Emirates Post
+    name_ar: بريد الإمارات
+    sector: postal
+    domains: [emiratespost.ae, epg.gov.ae]
+    brands: [emiratespost, emirates-post, epost]
+    services: [customs duty, delivery fees, redelivery fees, PO box renewal]
+  - id: dewa
+    name: Dubai Electricity and Water Authority
+    name_ar: هيئة كهرباء ومياه دبي
+    sector: utilities
+    domains: [dewa.gov.ae]
+    brands: [dewa]
+    services: [utility bill payment, deposit refund]
+  - id: addc
+    name: Abu Dhabi Distribution Company
+    name_ar: شركة أبوظبي للتوزيع
+    sector: utilities
+    domains: [addc.ae]
+    brands: [addc]
+    services: [utility bill payment]
+  - id: sewa
+    name: Sharjah Electricity, Water and Gas Authority
+    name_ar: هيئة كهرباء ومياه وغاز الشارقة
+    sector: utilities
+    domains: [sewa.gov.ae]
+    brands: [sewa]
+    services: [utility bill payment]
+  - id: etihadwe
+    name: Etihad Water and Electricity
+    name_ar: الاتحاد للماء والكهرباء
+    sector: utilities
+    domains: [etihadwe.ae]
+    brands: [etihadwe]
+    services: [utility bill payment]
+  - id: icp
+    name: Federal Authority for Identity, Citizenship, Customs and Port Security
+    name_ar: الهيئة الاتحادية للهوية والجنسية والجمارك وأمن المنافذ
+    sector: federal
+    domains: [icp.gov.ae, ica.gov.ae, uaeicp.ae]
+    brands: [icp, ica, emiratesid, uaeicp]
+    ambiguous: [icp, ica]
+    services: [Emirates ID fees, visa fees, residency renewal, customs]
+  - id: uaepass
+    name: UAE PASS
+    name_ar: الهوية الرقمية
+    sector: identity
+    domains: [uaepass.ae]
+    brands: [uaepass, uae-pass]
+    services: [digital identity login]
+  - id: mohre
+    name: Ministry of Human Resources and Emiratisation
+    name_ar: وزارة الموارد البشرية والتوطين
+    sector: federal
+    domains: [mohre.gov.ae]
+    brands: [mohre]
+    services: [work permit fees, labour fines]
+  - id: gdrfa
+    name: General Directorate of Residency and Foreigners Affairs (Dubai)
+    name_ar: الإدارة العامة للإقامة وشؤون الأجانب
+    sector: immigration
+    domains: [gdrfad.gov.ae, amer.ae]
+    brands: [gdrfa, gdrfad, amer]
+    ambiguous: [amer]
+    services: [visa fees, overstay fines]
+  - id: dm
+    name: Dubai Municipality
+    name_ar: بلدية دبي
+    sector: municipal
+    domains: [dm.gov.ae]
+    brands: [dubaimunicipality]
+    services: [municipal fees, fines]
+  - id: dubaicourts
+    name: Dubai Courts
+    name_ar: محاكم دبي
+    sector: justice
+    domains: [dc.gov.ae]
+    brands: [dubaicourts]
+    services: [court fees, fines]
+  - id: adjd
+    name: Abu Dhabi Judicial Department
+    name_ar: دائرة القضاء أبوظبي
+    sector: justice
+    domains: [adjd.gov.ae]
+    brands: [adjd]
+    services: [court fees, fines]
+  - id: moj
+    name: Ministry of Justice
+    name_ar: وزارة العدل
+    sector: justice
+    domains: [moj.gov.ae]
+    brands: [moj]
+    ambiguous: [moj]
+    services: [court fees]
+  - id: tamm
+    name: TAMM (Abu Dhabi Government Services)
+    name_ar: تم
+    sector: portal
+    domains: [tamm.abudhabi]
+    brands: [tamm]
+    services: [Abu Dhabi government fees, fines]
+  - id: itc
+    name: Abu Dhabi Mobility (Integrated Transport Centre)
+    name_ar: مركز النقل المتكامل
+    sector: transport
+    domains: [itc.gov.ae, darb.ae]
+    brands: [darb, mawaqif, itcabudhabi]
+    services: [DARB toll, Mawaqif parking fines]
+  - id: mawaqif
+    name: Mawaqif (Abu Dhabi parking)
+    name_ar: مواقف
+    sector: transport
+    domains: [mawaqif.ae]
+    brands: [mawaqif]
+    services: [parking payment, parking fines]
+  - id: dubaicustoms
+    name: Dubai Customs
+    name_ar: جمارك دبي
+    sector: customs
+    domains: [dubaicustoms.gov.ae]
+    brands: [dubaicustoms]
+    services: [customs duty]
+  - id: dld
+    name: Dubai Land Department
+    name_ar: دائرة الأراضي والأملاك
+    sector: property
+    domains: [dubailand.gov.ae]
+    brands: [dubailand]
+    services: [registration fees]
+  - id: dha
+    name: Dubai Health Authority
+    name_ar: هيئة الصحة بدبي
+    sector: health
+    domains: [dha.gov.ae]
+    brands: [dha]
+    ambiguous: [dha]
+    services: [medical fitness fees, health card]
+  - id: mohap
+    name: Ministry of Health and Prevention
+    name_ar: وزارة الصحة ووقاية المجتمع
+    sector: health
+    domains: [mohap.gov.ae]
+    brands: [mohap]
+    services: [licence fees]
+  - id: gpssa
+    name: General Pension and Social Security Authority
+    name_ar: الهيئة العامة للمعاشات والتأمينات الاجتماعية
+    sector: pension
+    domains: [gpssa.gov.ae]
+    brands: [gpssa]
+    services: [pension payments]
+  - id: cbuae
+    name: Central Bank of the UAE
+    name_ar: مصرف الإمارات العربية المتحدة المركزي
+    sector: finance
+    domains: [centralbank.ae]
+    brands: [cbuae, centralbank]
+    services: [consumer protection, fraud reporting]
+  - id: tdra
+    name: Telecommunications and Digital Government Regulatory Authority
+    name_ar: هيئة تنظيم الاتصالات والحكومة الرقمية
+    sector: federal
+    domains: [tdra.gov.ae]
+    brands: [tdra]
+    services: [government portal]
+  - id: uae
+    name: UAE Government portal
+    name_ar: البوابة الرسمية لحكومة الإمارات
+    sector: portal
+    domains: [u.ae, government.ae]
+    brands: [uaegov, govuae]
+    services: [federal services]
+  - id: dubaigov
+    name: Dubai Government portal (Digital Dubai)
+    name_ar: حكومة دبي
+    sector: portal
+    domains: [dubai.ae, digitaldubai.ae, dubainow.ae]
+    brands: [dubainow, digitaldubai, dubaigov, smartdubai]
+    services: [Dubai government payments]
+  - id: abudhabigov
+    name: Abu Dhabi Government portal
+    name_ar: حكومة أبوظبي
+    sector: portal
+    domains: [abudhabi.ae]
+    brands: [abudhabigov]
+    services: [Abu Dhabi government payments]
+
+# Context tokens. Alone they are weak; together with a brand they are strong.
+government_cues: [gov, govt, government, uae, emirates, emirate, dubai, abudhabi, sharjah, ajman, rak, fujairah, federal,
+                  ministry, authority, official, portal, eservices, eservice, smart, national, ae]
+
+# Financial / lure keywords. "strong" ones are the classic payment-scam vocabulary.
+financial_keywords:
+  strong: [fine, fines, refund, refunds, violation, violations, penalty, penalties, toll, tolls, customs, redelivery,
+           overdue, unpaid, mukhalafat, mukhalafa, gharama, gharamat, istirdad]
+  normal: [pay, payment, payments, fee, fees, tax, taxes, vat, traffic, renew, renewal, bill, bills, invoice, duty,
+           charge, charges, balance, recharge, topup, top-up, wallet, settle, settlement, due, mulkiya, license, licence,
+           permit, visa, residency, grant, benefit, pension, salary, zakat, dirham, aed, secure, verify, verification,
+           claim, delivery, parcel, shipment, suspended, blocked, outstanding, account, login, signin, update, service,
+           services, rusoom, rasoom, dareeba, tajdeed, dafa, daf3]
+
+risky_tlds: [top, xyz, shop, online, site, club, icu, live, click, link, buzz, work, rest, cfd, sbs, cam, monster, quest,
+             cyou, tk, ml, ga, cf, gq, info, biz, vip, pro, store, fun, space, website, tech, pw, cc, su, ru, lol, bond,
+             best, today, world, zone, support, help, center, services]
+
+# Certificate authorities that issue free, automated certificates (common in phishing; a weak signal on its own).
+free_cas: ["Let's Encrypt", "ZeroSSL", "Google Trust Services", "Buypass", "SSL.com", "Actalis", "cPanel", "GoGetSSL", "TrustAsia", "Sectigo (free)"]

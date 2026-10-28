@@ -1,0 +1,9 @@
+{
+  "domain": "dubaipolice-fines.online",
+  "kind": "parked",
+  "title": "dubaipolice-fines.online — parked",
+  "entity": "Parked domain (registrar placeholder)",
+  "entity_ar": "نطاق محجوز",
+  "service": "Domain parking placeholder page",
+  "notes": "Generic registrar parking page ('website coming soon', related-search links, no forms). Same domain later goes live as fake/dubaipolice-fines.online — included to show the detector handling a benign/dormant state before a clone is deployed. No card fields, no brand-logo id."
+}

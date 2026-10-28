@@ -1,0 +1,102 @@
+# Scripted demonstration: a "traffic-fine refund" scam wave, as it would unfold on the live certificate feed.
+# Times are seconds after the scenario starts (divided by the speed factor). The presenter can also fire any
+# step immediately from the dashboard's Presenter drawer.
+name: Fines-refund scam wave
+description: >
+  A scammer registers look-alike domains for Dubai RTA, Salik, Emirates Post, the Federal Tax Authority and
+  Dubai Police, obtains free certificates and starts texting victims. SAQR sees the names in the
+  certificate logs within seconds, verifies the pages in an isolated browser, seals the evidence and
+  lets the analyst block the whole campaign with one click. A benign gym site that shares the RTA name
+  and a parked domain that only goes live later show the safeguards and the re-check loop.
+steps:
+  - id: s01
+    at: 10
+    kind: cert
+    domain: rta-fines-refund.com
+    issuer: "Let's Encrypt (R12)"
+    site: fake/rta-fines-refund.com
+    label: "Certificate issued for rta-fines-refund.com (clone of the RTA fines page)"
+  - id: s02
+    at: 42
+    kind: report
+    channel: sms
+    sender: "+971501234567"
+    text: "RTA: Your traffic fine (plate P-49172) was overcharged by AED 320. Claim your refund within 24h or it will be forfeited: https://rta-fines-refund.com/refund"
+    label: "Citizen forwards the SMS lure"
+  - id: s03
+    at: 55
+    kind: cert
+    domain: finesse-payroll.com
+    issuer: "Google Trust Services (WE1)"
+    site: benign/finesse-payroll.com
+    label: "Unrelated business name (finesse-payroll.com) — discarded by the cheap filter"
+  - id: s04
+    at: 62
+    kind: cert
+    domain: salik-recharge-ae.com
+    issuer: "ZeroSSL (ZeroSSL RSA Domain Secure Site CA)"
+    site: fake/salik-recharge-ae.com
+    label: "Certificate issued for salik-recharge-ae.com"
+  - id: s05
+    at: 75
+    kind: report
+    channel: whatsapp
+    sender: "+971559876543"
+    text: "Salik: your toll balance is negative (AED -45.00). Recharge now to avoid a AED 100 fine ➜ https://salik-recharge-ae.com"
+    label: "WhatsApp lure for Salik forwarded"
+  - id: s06
+    at: 85
+    kind: cert
+    domain: emiratespost-redelivery.shop
+    issuer: "Let's Encrypt (R12)"
+    site: fake/emiratespost-redelivery.shop
+    label: "Certificate issued for emiratespost-redelivery.shop"
+  - id: s07
+    at: 96
+    kind: report
+    channel: sms
+    sender: "+971521112233"
+    text: "Emirates Post: your parcel EP44871203AE could not be delivered. Pay the AED 11.50 redelivery fee to reschedule: https://emiratespost-redelivery.shop/track"
+    label: "Parcel-scam SMS forwarded"
+  - id: s08
+    at: 104
+    kind: report
+    channel: sms
+    sender: "+971507654321"
+    text: "EMIRATES POST – Parcel on hold. Redelivery fee AED 11.50 must be paid within 48 hours: https://emiratespost-redelivery.shop/pay?id=44871203"
+    label: "Second variant of the parcel SMS (clusters into the same campaign)"
+  - id: s09
+    at: 115
+    kind: cert
+    domain: rta-ae-fitness.com
+    issuer: "Let's Encrypt (R12)"
+    site: benign/rta-ae-fitness.com
+    label: "rta-ae-fitness.com — passes the filter, cleared by verification (false-positive safeguard)"
+  - id: s10
+    at: 128
+    kind: cert
+    domain: dubaipolice-fines.online
+    issuer: "Let's Encrypt (R12)"
+    site: parked/dubaipolice-fines.online
+    label: "dubaipolice-fines.online — certificate issued but the page is still parked"
+  - id: s11
+    at: 140
+    kind: cert
+    domain: xn--tx-refund-gov-w1k.com
+    issuer: "Let's Encrypt (R12)"
+    site: fake/xn--tx-refund-gov-w1k.com
+    label: "IDN homograph tаx-refund-gov.com (Cyrillic а) — clone of the FTA refund page"
+  - id: s12
+    at: 155
+    kind: report
+    channel: partner
+    sender: "fraud-desk@bank.example"
+    text: "Bank fraud desk: customers report card charges after visiting https://moi-uae-fines-pay.com (MOI fines payment). Site collects PAN/CVV; please verify and block."
+    site: fake/moi-uae-fines-pay.com
+    label: "Bank partner report — a site that never appeared in the certificate feed"
+  - id: s13
+    at: 230
+    kind: activate
+    domain: dubaipolice-fines.online
+    site: fake/dubaipolice-fines.online
+    label: "Scammer activates the parked dubaipolice-fines.online — caught by the scheduled re-check"

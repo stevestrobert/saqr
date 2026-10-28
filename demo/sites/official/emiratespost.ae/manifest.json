@@ -1,0 +1,10 @@
+{
+  "domain": "emiratespost.ae",
+  "kind": "official",
+  "title": "Emirates Post · Customs Duty & Delivery Fee Payment",
+  "entity": "Emirates Post",
+  "entity_ar": "بريد الإمارات",
+  "service": "Shipment tracking and customs duty / delivery fee payment",
+  "official_domain": "emiratespost.ae",
+  "notes": "Reference official portal. Tracks a shipment and shows customs duty (AED 42.00) with a redirect to a secure payment gateway. No card fields. Cloned by fake/emiratespost-redelivery.shop."
+}

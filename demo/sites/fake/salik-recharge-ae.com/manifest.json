@@ -1,0 +1,13 @@
+{
+  "domain": "salik-recharge-ae.com",
+  "kind": "fake",
+  "title": "Salik Recharge",
+  "entity": "Salik Company",
+  "entity_ar": "سالك",
+  "service": "Salik account recharge and toll statement",
+  "official_domain": "salik.ae",
+  "clone_of": "salik.ae",
+  "lure": "Salik balance negative (AED -45.00); recharge now to avoid a AED 100 fine",
+  "collects": ["card_name","card_number","expiry","cvv"],
+  "notes": "Near-exact clone of official/salik.ae (identical header, brand-logo SVG, teal palette, footer). Fake negative-balance pressure to harvest card details on-page."
+}

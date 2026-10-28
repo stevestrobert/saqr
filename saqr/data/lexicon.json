@@ -1,0 +1,29 @@
+{
+  "payment_terms": {
+    "en": ["pay now", "payment", "card number", "cvv", "cvc", "expiry", "expiration", "refund", "fine", "fines", "fee", "fees",
+           "penalty", "overdue", "outstanding", "unpaid", "toll", "recharge", "balance", "customs duty", "delivery fee",
+           "redelivery", "vat refund", "tax refund", "amount due", "aed", "dirham", "settle", "pay the", "proceed to payment",
+           "secure payment", "bank transfer", "iban", "otp", "one-time password", "verification code", "verify your card"],
+    "ar": ["ادفع", "الدفع", "دفع", "رقم البطاقة", "رمز الأمان", "تاريخ الانتهاء", "استرداد", "مخالفة", "مخالفات", "غرامة",
+           "رسوم", "متأخر", "مستحق", "رصيد", "إعادة شحن", "الرسوم الجمركية", "رسوم التوصيل", "ضريبة", "درهم", "رمز التحقق",
+           "كلمة المرور لمرة واحدة", "تحويل بنكي", "آيبان", "تأكيد البطاقة"]
+  },
+  "urgency_terms": {
+    "en": ["within 24 hours", "within 48 hours", "immediately", "urgent", "last warning", "final notice", "will be forfeited",
+           "will be suspended", "legal action", "avoid a fine", "avoid penalty", "expires today", "act now", "limited time",
+           "your vehicle will", "your account will", "blocked", "on hold", "could not be delivered", "claim now"],
+    "ar": ["خلال 24 ساعة", "خلال 48 ساعة", "فوراً", "فورا", "عاجل", "تحذير أخير", "إشعار نهائي", "سيتم إلغاء", "سيتم تعليق",
+           "إجراء قانوني", "لتجنب", "ينتهي اليوم", "الآن", "قيد الانتظار", "لم يتم التوصيل"]
+  },
+  "gov_claims": {
+    "en": ["government of dubai", "government of the united arab emirates", "uae government", "federal government",
+           "ministry of", "authority", "official portal", "e-services", "general directorate", "department of",
+           "roads and transport authority", "dubai police", "abu dhabi police", "federal tax authority", "emirates post",
+           "ministry of interior", "ministry of finance", "salik", "dewa", "uae pass", "emirates id", "tamm", "mohre"],
+    "ar": ["حكومة دبي", "حكومة الإمارات", "وزارة", "هيئة", "البوابة الرسمية", "الخدمات الإلكترونية", "الإدارة العامة",
+           "هيئة الطرق والمواصلات", "شرطة دبي", "شرطة أبوظبي", "الهيئة الاتحادية للضرائب", "بريد الإمارات", "وزارة الداخلية",
+           "وزارة المالية", "سالك", "هيئة كهرباء ومياه دبي", "الهوية الرقمية", "الهوية الإماراتية"]
+  },
+  "legit_gateway_terms": ["magnati", "network international", "e-dirham", "edirham", "payfort", "checkout.com", "telr",
+                          "mashreq pay", "noon payments", "amazon payment services", "redirected to the payment gateway"]
+}

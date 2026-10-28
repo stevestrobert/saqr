@@ -1,0 +1,9 @@
+{
+  "domain": "finesse-payroll.com",
+  "kind": "benign",
+  "title": "Finesse Payroll — payroll software for UAE SMEs",
+  "entity": "Finesse Technologies FZ-LLC",
+  "entity_ar": "فينيس بايرول",
+  "service": "Payroll & HR SaaS for UAE SMEs",
+  "notes": "False-positive demo: a legitimate unrelated SaaS business whose name contains the keyword substrings 'fines' (Finesse) and 'pay' (Payroll). No government styling, no brand-logo id, no card fields. The only form is a Request-a-demo form (name, company, email) collecting non-sensitive data."
+}

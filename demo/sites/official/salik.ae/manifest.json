@@ -1,0 +1,10 @@
+{
+  "domain": "salik.ae",
+  "kind": "official",
+  "title": "Salik · Recharge Account & Toll Statement",
+  "entity": "Salik Company",
+  "entity_ar": "سالك",
+  "service": "Salik account recharge and toll statement",
+  "official_domain": "salik.ae",
+  "notes": "Reference official portal. Shows account balance and recent toll passages, with a recharge amount selector and a redirect to a secure payment gateway. No card fields. Cloned by fake/salik-recharge-ae.com."
+}

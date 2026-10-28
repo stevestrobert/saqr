@@ -1,0 +1,11 @@
+{
+  "_comment": "RFC 6962 logs tailed in ctlogs/hybrid mode. Google logs are reachable from most networks; the others are listed for completeness and can be enabled via SAQR_CT_LOGS. The list can be refreshed from https://www.gstatic.com/ct/log_list/v3/log_list.json",
+  "logs": [
+    {"name": "Google Argon 2026h2", "url": "https://ct.googleapis.com/logs/us1/argon2026h2/", "operator": "Google"},
+    {"name": "Google Xenon 2026h2", "url": "https://ct.googleapis.com/logs/eu1/xenon2026h2/", "operator": "Google"},
+    {"name": "Cloudflare Nimbus 2026", "url": "https://ct.cloudflare.com/logs/nimbus2026/", "operator": "Cloudflare"},
+    {"name": "Let's Encrypt Oak 2026h2", "url": "https://oak.ct.letsencrypt.org/2026h2/", "operator": "Let's Encrypt"},
+    {"name": "DigiCert Wyvern 2026h2", "url": "https://wyvern.ct.digicert.com/2026h2/", "operator": "DigiCert"},
+    {"name": "Sectigo Sabre 2026h2", "url": "https://sabre2026h2.ct.sectigo.com/", "operator": "Sectigo"}
+  ]
+}

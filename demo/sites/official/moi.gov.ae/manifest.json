@@ -1,0 +1,10 @@
+{
+  "domain": "moi.gov.ae",
+  "kind": "official",
+  "title": "Ministry of Interior · Traffic Fines Payment",
+  "entity": "Ministry of Interior",
+  "entity_ar": "وزارة الداخلية",
+  "service": "Federal traffic fines inquiry and payment",
+  "official_domain": "moi.gov.ae",
+  "notes": "Reference official portal. Looks up fines by Emirates ID / traffic file and redirects to a secure payment gateway. No card fields. Layout cloned by fake/dubaipolice-fines.online; impersonated (different layout) by fake/moi-uae-fines-pay.com."
+}

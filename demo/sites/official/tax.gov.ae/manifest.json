@@ -1,0 +1,10 @@
+{
+  "domain": "tax.gov.ae",
+  "kind": "official",
+  "title": "Federal Tax Authority · VAT Refund Status",
+  "entity": "Federal Tax Authority",
+  "entity_ar": "الهيئة الاتحادية للضرائب",
+  "service": "VAT refund status inquiry",
+  "official_domain": "tax.gov.ae",
+  "notes": "Reference official portal. Shows VAT refund status paid to a registered IBAN; never collects card details. Cloned by fake/xn--tx-refund-gov-w1k.com (homoglyph domain)."
+}

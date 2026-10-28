@@ -1,0 +1,13 @@
+{
+  "domain": "moi-uae-fines-pay.com",
+  "kind": "fake",
+  "title": "Ministry of Interior — UAE | Pay your traffic fines online",
+  "entity": "Ministry of Interior",
+  "entity_ar": "وزارة الداخلية",
+  "service": "Traffic fines payment",
+  "official_domain": "moi.gov.ae",
+  "lure": "Pay traffic fines online (AED 1,000 total); 15-day deadline, travel-ban threat",
+  "collects": ["card_name","card_number","expiry","cvv"],
+  "iocs": {"phones": ["+971 55 000 0002"], "ibans": ["AE07 0331 2345 6789 0123 456"], "whatsapp": ["+971 55 000 0002"]},
+  "notes": "Impersonates the Ministry of Interior by name only; does NOT copy the official layout (generic white/blue Bootstrap-like template) and uses a different generic crest with NO brand-logo id. Harvests card details and also offers bank transfer to a synthetic IBAN with WhatsApp receipt confirmation. clone_of intentionally omitted."
+}

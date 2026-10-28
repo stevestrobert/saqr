@@ -1,0 +1,13 @@
+{
+  "domain": "xn--tx-refund-gov-w1k.com",
+  "kind": "fake",
+  "title": "VAT Refund Verification",
+  "entity": "Federal Tax Authority",
+  "entity_ar": "الهيئة الاتحادية للضرائب",
+  "service": "VAT refund status inquiry",
+  "official_domain": "tax.gov.ae",
+  "clone_of": "tax.gov.ae",
+  "lure": "VAT refund of AED 1,250.00 is ready; verify your card to receive it",
+  "collects": ["trn","iban","card_name","card_number","expiry","cvv"],
+  "notes": "Homoglyph (IDN) attack: xn--tx-refund-gov-w1k.com is the punycode of tаx-refund-gov.com, where the first 'a' is a Cyrillic U+0430. Near-exact clone of official/tax.gov.ae (same header, scales brand-logo SVG, navy/gold palette). The displayed look-alike domain appears in the footer."
+}

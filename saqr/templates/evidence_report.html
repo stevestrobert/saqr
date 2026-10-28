@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SAQR evidence report — {{ case.domain }}</title>
+<style>
+  body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #111; margin: 0; background: #f6f7f9; }
+  .page { max-width: 980px; margin: 0 auto; padding: 32px 40px 60px; background: #fff; }
+  header { border-bottom: 3px solid #0b3d2e; padding-bottom: 14px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end; }
+  h1 { font-size: 22px; margin: 0; letter-spacing: .5px; } h1 small { color: #666; font-weight: normal; font-size: 13px; display: block; margin-top: 4px; }
+  h2 { font-size: 15px; text-transform: uppercase; letter-spacing: .08em; color: #0b3d2e; margin: 28px 0 10px; border-bottom: 1px solid #e3e6ea; padding-bottom: 6px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; } td, th { padding: 6px 8px; border-bottom: 1px solid #eceff2; vertical-align: top; text-align: left; }
+  th { background: #f1f3f5; font-weight: 600; width: 190px; }
+  code, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; word-break: break-all; }
+  .verdict { display: inline-block; padding: 4px 12px; border-radius: 999px; color: #fff; font-weight: 700; font-size: 13px; }
+  .confirmed_fake { background: #b3261e; } .suspicious { background: #b26a00; } .benign { background: #2e7d32; } .inactive { background: #546e7a; } .official { background: #1565c0; }
+  .shots { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; } .shots figure { margin: 0; border: 1px solid #dfe3e7; padding: 6px; background: #fafbfc; }
+  .shots img { width: 100%; display: block; max-height: 720px; object-fit: cover; object-position: top; } figcaption { font-size: 12px; color: #555; margin-top: 6px; }
+  ul.reasons li { margin-bottom: 6px; font-size: 13.5px; }
+  .meta { font-size: 12px; color: #555; } .stamp { background: #0b3d2e; color: #fff; padding: 10px 14px; border-radius: 6px; font-size: 12.5px; }
+  .notice { background: #fff8e1; border-left: 4px solid #b26a00; padding: 10px 14px; font-size: 12.5px; margin-top: 12px; }
+  @media print { body { background: #fff; } .page { padding: 0; } }
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+  <div>
+    <h1>SAQR · Evidence package <small>Impersonation of an official government financial service — automated capture record</small></h1>
+  </div>
+  <div class="stamp mono">Package {{ pkg.id }}<br>Case {{ case.id }}<br>{{ pkg.created_at.strftime('%Y-%m-%d %H:%M:%S UTC') }}</div>
+</header>
+
+<h2>1. Subject</h2>
+<table>
+  <tr><th>Domain</th><td class="mono">{{ case.domain }}</td></tr>
+  <tr><th>URL captured</th><td class="mono">{{ case.capture.final_url or case.url }}</td></tr>
+  <tr><th>Page title</th><td>{{ case.capture.title }}</td></tr>
+  <tr><th>Verdict</th><td><span class="verdict {{ verdict.label.value }}">{{ verdict.label.value.replace('_',' ') }}</span> &nbsp; risk {{ verdict.risk }}/100 · confidence {{ (verdict.confidence*100)|round|int }}%</td></tr>
+  <tr><th>Imitated entity</th><td>{{ verdict.visual[0].reference_name if verdict.visual else (verdict.text.brand_mentions|join(', ') if verdict.text.brand_mentions else '—') }}</td></tr>
+  <tr><th>Detection source</th><td>{{ case.source.value }}{% if pkg.ct_entry %} — {{ pkg.ct_entry.log }} index {{ pkg.ct_entry.index }}{% endif %}</td></tr>
+  <tr><th>Timeline</th><td>
+    {% if case.issued_at %}certificate logged {{ case.issued_at.strftime('%Y-%m-%d %H:%M:%S UTC') }} · {% endif %}
+    detected {{ case.detected_at.strftime('%Y-%m-%d %H:%M:%S UTC') }}{% if case.verified_at %} · verified {{ case.verified_at.strftime('%H:%M:%S UTC') }}{% endif %}
+    {% if case.approved_at %} · approved by {{ case.approved_by }} {{ case.approved_at.strftime('%H:%M:%S UTC') }}{% endif %}</td></tr>
+</table>
+
+<h2>2. Why it was classified</h2>
+<ul class="reasons">{% for r in reasons %}<li>{{ r }}</li>{% endfor %}</ul>
+<table>
+  <tr><th>Signal components</th><td>{% for k, v in verdict.components.items() %}{{ k }} {{ (v*100)|round|int }}%{% if not loop.last %} · {% endif %}{% endfor %}</td></tr>
+  <tr><th>Form fields</th><td>{{ verdict.form.summary or '—' }}{% if verdict.form.categories %} <span class="meta">({{ verdict.form.categories|join(', ') }})</span>{% endif %}</td></tr>
+  <tr><th>Visual encoder</th><td>{{ verdict.encoder }}</td></tr>
+</table>
+
+<h2>3. Screenshots</h2>
+<div class="shots">
+  <figure><img src="data:image/png;base64,{{ screenshot_b64 }}" alt="desktop screenshot"><figcaption>Desktop viewport (1280px), full page — screenshot_desktop.png</figcaption></figure>
+  {% if mobile_b64 %}<figure><img src="data:image/png;base64,{{ mobile_b64 }}" alt="mobile screenshot"><figcaption>Mobile viewport (390px) — screenshot_mobile.png</figcaption></figure>{% endif %}
+</div>
+
+<h2>4. Infrastructure</h2>
+<table>
+  <tr><th>IP addresses</th><td class="mono">{{ pkg.dns.ips|join(', ') if pkg.dns.ips else (case.capture.ip or '—') }}</td></tr>
+  <tr><th>Hosting</th><td>{% for h in pkg.hosting.hosts %}{{ h.asn }} {{ h.as_name }} {{ h.country }}{% if h.abuse_contacts %} · abuse: {{ h.abuse_contacts|join(', ') }}{% endif %}<br>{% endfor %}</td></tr>
+  <tr><th>Registrar</th><td>{{ pkg.registration.registrar or pkg.registration.status }}{% if pkg.registration.abuse_contacts %} · abuse: {{ pkg.registration.abuse_contacts|join(', ') }}{% endif %}</td></tr>
+  <tr><th>Registered</th><td>{{ pkg.registration.events.registration if pkg.registration.events else '—' }}</td></tr>
+  <tr><th>Name servers</th><td class="mono">{{ (pkg.dns.records.NS if pkg.dns.records and pkg.dns.records.NS else pkg.registration.nameservers)|join(', ') }}</td></tr>
+  <tr><th>Certificate</th><td>{{ pkg.certificate.issuer or '—' }}{% if pkg.certificate.sha256 %}<br><span class="mono">sha256 {{ pkg.certificate.sha256 }}</span>{% endif %}</td></tr>
+  {% if pkg.iocs %}<tr><th>Indicators on page</th><td>{% for k, v in pkg.iocs.items() %}<b>{{ k }}</b>: <span class="mono">{{ v|join(', ') }}</span><br>{% endfor %}</td></tr>{% endif %}
+  {% if pkg.dns.note %}<tr><th>Note</th><td class="meta">{{ pkg.dns.note }}</td></tr>{% endif %}
+</table>
+
+<h2>5. Integrity</h2>
+<table>
+  <tr><th>Merkle root</th><td class="mono">{{ pkg.merkle_root }}</td></tr>
+  <tr><th>Manifest SHA-256</th><td class="mono">{{ pkg.manifest_sha256 }}</td></tr>
+  {% if pkg.timestamp %}<tr><th>Timestamp</th><td>{{ pkg.timestamp.kind }} · {{ pkg.timestamp.authority }} · {{ pkg.timestamp.time.strftime('%Y-%m-%d %H:%M:%S UTC') }} · token <span class="mono">{{ pkg.timestamp.token_path }}</span><br><span class="meta">{{ pkg.timestamp.note }}</span></td></tr>{% endif %}
+</table>
+<table style="margin-top:10px">
+  <tr><th>Artifact</th><th style="width:auto">SHA-256</th><th style="width:70px">Bytes</th></tr>
+  {% for a in artifacts %}<tr><td>{{ a.name }}<br><span class="meta">{{ a.description }}</span></td><td class="mono">{{ a.sha256 }}</td><td>{{ a.size }}</td></tr>{% endfor %}
+</table>
+
+<h2>6. Chain of custody</h2>
+<table>
+  {% for c in custody %}<tr><td class="mono" style="width:190px">{{ c.at.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3] }}Z</td><td><b>{{ c.event }}</b> — {{ c.detail }} <span class="meta">({{ c.actor }})</span></td></tr>{% endfor %}
+</table>
+
+<div class="notice">
+  Generated automatically by SAQR node <b>{{ pkg.tool_versions.saqr and 'v' ~ pkg.tool_versions.saqr }}</b>. Recompute any hash with <code>sha256sum</code>, the Merkle root with
+  <code>saqr evidence verify &lt;dir&gt;</code>, and an RFC 3161 token with <code>openssl ts -verify</code>. This record documents what a public web
+  server returned to an automated client at the stated time; it contains no personal data of citizens.
+</div>
+</div>
+</body>
+</html>

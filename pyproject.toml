@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "saqr"
+version = "0.1.0"
+description = "SAQR — early-warning and one-click takedown for impersonated government financial services (certificate-transparency sensing, visual verification, evidence packaging, coordinated response)."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "SAQR team (NYUAD) — hackathon.ae 2026" }]
+keywords = ["phishing", "certificate-transparency", "brand-impersonation", "takedown", "uae", "digital-trust"]
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+  "pydantic>=2.7",
+  "pydantic-settings>=2.3",
+  "httpx>=0.27",
+  "websockets>=12",
+  "playwright>=1.45",
+  "pillow>=10",
+  "numpy>=1.26",
+  "scipy>=1.13",
+  "opencv-python-headless>=4.9",
+  "dnspython>=2.6",
+  "cryptography>=42",
+  "asn1crypto>=1.5",
+  "rapidfuzz>=3.9",
+  "idna>=3.7",
+  "tldextract>=5.1",
+  "jinja2>=3.1",
+  "pyyaml>=6.0",
+  "python-multipart>=0.0.9",
+  "typer>=0.12",
+  "rich>=13",
+]
+
+[project.optional-dependencies]
+# Deep visual encoder (DINOv3 / DINOv2). Heavy; the perceptual encoder is used when absent.
+ml = ["torch>=2.3", "transformers>=4.44", "timm>=1.0"]
+dev = ["pytest>=8", "pytest-asyncio>=0.23", "ruff>=0.5"]
+
+[project.scripts]
+saqr = "saqr.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["saqr*"]
+
+[tool.setuptools.package-data]
+saqr = ["data/*", "data/**/*", "templates/*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 160
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501", "B008", "B019", "UP017", "SIM117", "SIM105", "UP035", "UP041"]

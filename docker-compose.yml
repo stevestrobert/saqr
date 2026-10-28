@@ -1,0 +1,19 @@
+services:
+  saqr:
+    build: .
+    image: saqr:latest
+    container_name: saqr
+    ports:
+      - "8000:8000"
+    environment:
+      # replay (offline scripted demo) | hybrid (real CT logs + injected demo domains) | ctlogs | certstream
+      SAQR_CT_SOURCE: ${SAQR_CT_SOURCE:-replay}
+      SAQR_DEMO_SPEED: ${SAQR_DEMO_SPEED:-1.0}
+      SAQR_VISUAL_ENCODER: ${SAQR_VISUAL_ENCODER:-perceptual}
+      SAQR_CONNECTOR_MODE: simulate
+    volumes:
+      - saqr-data:/data
+    restart: unless-stopped
+
+volumes:
+  saqr-data:

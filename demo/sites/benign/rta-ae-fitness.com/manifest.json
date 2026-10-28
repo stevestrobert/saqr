@@ -1,0 +1,9 @@
+{
+  "domain": "rta-ae-fitness.com",
+  "kind": "benign",
+  "title": "RTA·AE Fitness Studio — Al Quoz, Dubai",
+  "entity": "RTA·AE Fitness Studio",
+  "entity_ar": "استوديو آر تي إيه للياقة",
+  "service": "Gym and fitness studio",
+  "notes": "False-positive demo: a legitimate unrelated gym whose brand name contains the tokens 'rta' and 'ae'. No government styling, no brand-logo id, no card fields. The only form is a free-trial contact form (name, phone)."
+}

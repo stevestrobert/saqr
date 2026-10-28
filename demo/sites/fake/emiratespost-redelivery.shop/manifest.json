@@ -1,0 +1,13 @@
+{
+  "domain": "emiratespost-redelivery.shop",
+  "kind": "fake",
+  "title": "Emirates Post Parcel Redelivery",
+  "entity": "Emirates Post",
+  "entity_ar": "بريد الإمارات",
+  "service": "Shipment tracking and customs duty / delivery fee payment",
+  "official_domain": "emiratespost.ae",
+  "clone_of": "emiratespost.ae",
+  "lure": "Parcel could not be delivered; pay AED 11.50 redelivery fee to reschedule",
+  "collects": ["full_name","address","city","emirate","card_number","expiry","cvv"],
+  "notes": "Classic parcel-redelivery scam. Near-exact clone of official/emiratespost.ae (same header, brand-logo SVG, red palette, footer) on a .shop TLD; harvests address plus card details."
+}

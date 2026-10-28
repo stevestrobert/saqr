@@ -1,0 +1,13 @@
+{
+  "domain": "dubaipolice-fines.online",
+  "kind": "fake",
+  "title": "Dubai Police Traffic Fines",
+  "entity": "Dubai Police",
+  "entity_ar": "شرطة دبي",
+  "service": "Traffic fines payment",
+  "official_domain": "dubaipolice.gov.ae",
+  "clone_of": "moi.gov.ae",
+  "lure": "Unpaid traffic fines (AED 1,120.00); pay now to avoid a travel ban",
+  "collects": ["emirates_id","card_name","card_number","expiry","cvv"],
+  "notes": "Live version of a domain that also appears as parked/dubaipolice-fines.online. Clones the official/moi.gov.ae layout and reuses the MOI falcon brand-logo SVG verbatim, but relabels the header as Dubai Police / شرطة دبي (logo does not match claimed entity). Harvests Emirates ID and card details."
+}

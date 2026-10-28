@@ -1,0 +1,10 @@
+{
+  "domain": "rta.ae",
+  "kind": "official",
+  "title": "RTA Dubai · Traffic Fines Inquiry & Payment",
+  "entity": "Roads and Transport Authority (Dubai)",
+  "entity_ar": "هيئة الطرق والمواصلات",
+  "service": "Traffic fines inquiry and payment",
+  "official_domain": "rta.ae",
+  "notes": "Reference official portal. Looks up a fine by plate/licence and offers a redirect to a secure payment gateway. No card-number/CVV fields on this page. Cloned by fake/rta-fines-refund.com."
+}

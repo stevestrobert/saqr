@@ -1,0 +1,236 @@
+<!doctype html>
+<!-- SAQR demo fixture: fictional replica for phishing-detection testing. Served on localhost only. Not affiliated with any government entity. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="saqr-demo-fixture" content="official">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:,">
+<title>Emirates Post · Customs Duty &amp; Delivery Fee Payment</title>
+<style>
+:root{
+  --brand:#d81e26;--brand-dark:#a8161c;--accent:#4a4a4a;
+  --ink:#1c1f24;--muted:#5c6670;--line:#e3e7ec;--bg:#f4f6f8;--card:#fff;
+  --radius:12px;--maxw:1120px;
+  --font:-apple-system,"Segoe UI",Roboto,"Noto Sans Arabic",Tahoma,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.5;font-size:16px;-webkit-font-smoothing:antialiased}
+img,svg{vertical-align:middle}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+.util{background:#2b2f34;color:#fff;font-size:13px}
+.util .wrap{display:flex;justify-content:space-between;align-items:center;min-height:38px;gap:12px;flex-wrap:wrap}
+.util a{color:#fff;text-decoration:none;opacity:.92}
+.util .l{display:flex;gap:16px;align-items:center}
+.util .r{display:flex;gap:10px;align-items:center}
+.util .secure{display:inline-flex;gap:6px;align-items:center;opacity:.95}
+.util button{background:transparent;border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:999px;padding:3px 12px;font:inherit;font-size:12px;cursor:pointer}
+.util button[aria-pressed="true"]{background:#fff;color:#2b2f34;font-weight:700}
+header.site{background:var(--card);border-bottom:3px solid var(--brand)}
+header.site .wrap{display:flex;align-items:center;gap:16px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit}
+.brand .names{display:flex;flex-direction:column;line-height:1.25}
+.brand .en{font-weight:800;font-size:17px;letter-spacing:.2px}
+.brand .ar{font-size:15px;color:var(--muted);direction:rtl;font-weight:600}
+.hspace{flex:1}
+.hcontact{text-align:right;font-size:12.5px;color:var(--muted);line-height:1.4}
+.hcontact .big{font-weight:800;color:var(--ink);font-size:15px}
+nav.main{background:var(--brand);color:#fff}
+nav.main .wrap{display:flex;gap:2px;flex-wrap:wrap}
+nav.main a{color:#fff;text-decoration:none;padding:12px 14px;font-size:14px;font-weight:600;opacity:.96;border-bottom:3px solid transparent;white-space:nowrap}
+nav.main a.active,nav.main a:hover{background:rgba(0,0,0,.16);border-bottom-color:#fff}
+nav.main a .a{display:block;font-size:11px;opacity:.85;direction:rtl;font-weight:500}
+.hero{background:var(--card);border-bottom:1px solid var(--line)}
+.hero .wrap{padding:26px 20px}
+.crumb{font-size:12.5px;color:var(--muted);margin-bottom:10px}
+.crumb a{color:var(--muted);text-decoration:none}
+.hero h1{margin:0;font-size:26px;line-height:1.2}
+.hero .ar{direction:rtl;font-size:17px;color:var(--muted);margin-top:6px;font-weight:600}
+.hero .bar{height:4px;width:66px;background:var(--accent);margin-top:14px;border-radius:2px}
+.content .wrap{display:grid;grid-template-columns:1fr 330px;gap:26px;padding:28px 20px 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:0 1px 2px rgba(16,24,40,.05)}
+.card h2{margin:0 0 4px;font-size:20px}
+.card .sub{color:var(--muted);font-size:13.5px;margin:0 0 20px}
+.card h2 .ar{display:block;font-size:14px;color:var(--muted);direction:rtl;font-weight:600;margin-top:2px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-size:13px;font-weight:700;color:var(--ink)}
+.field label .ar{font-weight:500;color:var(--muted);font-size:12px;direction:rtl;margin-right:6px}
+.field input{font:inherit;font-size:15px;padding:11px 12px;border:1px solid #cdd4db;border-radius:8px;background:#fff;color:var(--ink);width:100%}
+.field input:focus{outline:2px solid var(--brand);outline-offset:0;border-color:var(--brand)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--brand);color:#fff;border:none;border-radius:8px;padding:12px 22px;font:inherit;font-weight:700;font-size:15px;cursor:pointer;text-decoration:none}
+.btn:hover{background:var(--brand-dark)}
+.btn-lg{width:100%;padding:14px 24px;font-size:16px}
+.note{font-size:12.5px;color:var(--muted);margin-top:12px;display:flex;gap:8px;align-items:flex-start}
+.track{display:flex;align-items:center;gap:12px;margin:4px 0 18px;flex-wrap:wrap}
+.track .step{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
+.track .dot{width:12px;height:12px;border-radius:50%;background:#cdd4db}
+.track .dot.on{background:var(--brand)}
+.track .line{flex:1;min-width:16px;height:2px;background:#cdd4db}
+.result{border:1px solid var(--line);border-left:4px solid var(--brand);border-radius:10px;padding:18px 20px;background:#fff}
+.result .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.tag{display:inline-block;background:#fff3e0;color:#9a6a00;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px}
+.row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.row:last-child{border-bottom:none}
+.row .k{color:var(--muted)}
+.row .v{font-weight:700;text-align:right}
+.amount{font-size:28px;font-weight:800;color:var(--brand);letter-spacing:.3px}
+.aside h3{margin:0 0 10px;font-size:15px}
+.aside ul{margin:0;padding-left:18px;color:var(--muted);font-size:13.5px}
+.aside li{margin:6px 0}
+.infohead{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-weight:800;font-size:15px}
+footer.site{background:#1a1d21;color:#c7ced6;font-size:14px;margin-top:34px}
+footer.site .wrap{padding:36px 20px}
+.fcols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:28px}
+footer h4{color:#fff;font-size:14px;margin:0 0 12px}
+footer p{margin:0 0 10px;color:#9aa5af;max-width:36ch}
+footer a{color:#c7ced6;text-decoration:none;display:block;padding:4px 0;opacity:.92;font-size:13.5px}
+footer a:hover{opacity:1;text-decoration:underline}
+.fbottom{border-top:1px solid rgba(255,255,255,.1);margin-top:26px;padding-top:18px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12.5px;color:#8b97a3}
+@media(max-width:860px){.content .wrap{grid-template-columns:1fr}}
+@media(max-width:620px){.fcols{grid-template-columns:1fr 1fr}.hcontact{display:none}}
+@media(max-width:470px){.fcols{grid-template-columns:1fr}.hero h1{font-size:22px}}
+</style>
+</head>
+<body>
+<div class="util"><div class="wrap">
+  <div class="l"><a href="#">UAE Government · حكومة الإمارات</a></div>
+  <div class="r">
+    <span class="secure">
+      <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5z" fill="#6fd08c"/><path d="M10.2 12.4l-1.9-1.9-1.4 1.4 3.3 3.3 6-6-1.4-1.4z" fill="#1a1d21"/></svg>
+      Secure connection
+    </span>
+    <button type="button" aria-pressed="true">EN</button>
+    <button type="button" aria-pressed="false">ع</button>
+  </div>
+</div></div>
+
+<header class="site"><div class="wrap">
+  <a class="brand" href="#">
+    <svg id="brand-logo" width="54" height="54" viewBox="0 0 64 64" role="img" aria-label="Emirates Post envelope emblem">
+      <rect x="3" y="3" width="58" height="58" rx="15" fill="#d81e26"/>
+      <rect x="3" y="3" width="58" height="58" rx="15" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="2"/>
+      <rect x="12" y="21" width="40" height="27" rx="3" fill="#fff"/>
+      <path d="M14 24 L32 37 L50 24" fill="none" stroke="#d81e26" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M39 14 q8 0 11 6" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    </svg>
+    <span class="names">
+      <span class="en">Emirates Post</span>
+      <span class="ar">بريد الإمارات</span>
+    </span>
+  </a>
+  <div class="hspace"></div>
+  <div class="hcontact">Contact Centre · مركز الاتصال<br><span class="big">600 599 999</span></div>
+</div></header>
+
+<nav class="main"><div class="wrap">
+  <a href="#">Home<span class="a">الرئيسية</span></a>
+  <a href="#" class="active">Track &amp; Trace<span class="a">تتبع الشحنات</span></a>
+  <a href="#">Send<span class="a">الإرسال</span></a>
+  <a href="#">Business<span class="a">الأعمال</span></a>
+  <a href="#">Branches<span class="a">الفروع</span></a>
+  <a href="#">Contact<span class="a">اتصل بنا</span></a>
+</div></nav>
+
+<section class="hero"><div class="wrap">
+  <div class="crumb"><a href="#">Home</a> › <a href="#">Track &amp; Trace</a> › Pay customs duty</div>
+  <h1>Customs Duty &amp; Delivery Fee Payment</h1>
+  <div class="ar">دفع الرسوم الجمركية ورسوم التوصيل</div>
+  <div class="bar"></div>
+</div></section>
+
+<main class="content"><div class="wrap">
+  <section>
+    <div class="card">
+      <h2>Track your shipment<span class="ar">تتبع شحنتك</span></h2>
+      <p class="sub">Enter your tracking number to view your shipment and pay any customs duty or delivery fee.</p>
+      <form action="#" method="post" onsubmit="return false">
+        <div class="field">
+          <label for="trackingNumber">Tracking number <span class="ar">رقم التتبع</span></label>
+          <input id="trackingNumber" name="trackingNumber" placeholder="e.g. EK123456789AE" autocomplete="off">
+        </div>
+        <button class="btn btn-lg" type="submit">Track · تتبع</button>
+        <p class="note">
+          <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="#5c6670" stroke-width="2"/><rect x="11" y="10" width="2" height="7" fill="#5c6670"/><rect x="11" y="6.5" width="2" height="2" fill="#5c6670"/></svg>
+          Emirates Post never requests card details by SMS or email. Pay customs duty only on the secure gateway.
+        </p>
+      </form>
+    </div>
+
+    <div class="card" style="margin-top:22px">
+      <h2>Shipment EK123456789AE<span class="ar">الشحنة</span></h2>
+      <div class="track">
+        <div class="step"><span class="dot on"></span>Received</div><span class="line"></span>
+        <div class="step"><span class="dot on"></span>In transit</div><span class="line"></span>
+        <div class="step"><span class="dot on"></span>Customs</div><span class="line"></span>
+        <div class="step"><span class="dot"></span>Out for delivery</div>
+      </div>
+      <div class="result">
+        <div class="top">
+          <strong>International parcel · طرد دولي</strong>
+          <span class="tag">Held at customs · محتجز في الجمارك</span>
+        </div>
+        <div class="row"><span class="k">Origin · المنشأ</span><span class="v">United Kingdom</span></div>
+        <div class="row"><span class="k">Weight · الوزن</span><span class="v">1.4 kg</span></div>
+        <div class="row"><span class="k">Delivery fee · رسوم التوصيل</span><span class="v">AED 15.00</span></div>
+        <div class="row"><span class="k">Customs duty · الرسوم الجمركية</span><span class="v">AED 42.00</span></div>
+        <div class="row"><span class="k">Total payable · الإجمالي المستحق</span><span class="v amount">AED 57.00</span></div>
+      </div>
+      <a class="btn btn-lg" href="#gateway" style="margin-top:18px">
+        <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V8a5 5 0 0 1 10 0v2" fill="none" stroke="#fff" stroke-width="2"/><rect x="5" y="10" width="14" height="10" rx="2" fill="#fff"/><rect x="11" y="13.5" width="2" height="3.5" rx="1" fill="#444"/></svg>
+        Pay via secure payment gateway · الدفع عبر بوابة الدفع الآمنة
+      </a>
+    </div>
+  </section>
+
+  <aside class="aside">
+    <div class="card">
+      <div class="infohead">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#d81e26"/><rect x="11" y="10" width="2" height="7" fill="#fff"/><rect x="11" y="6.5" width="2" height="2" fill="#fff"/></svg>
+        Customs duty · الرسوم الجمركية
+      </div>
+      <ul>
+        <li>Duty applies to imported goods above AED 300 in value.</li>
+        <li>Pay online to release your parcel for delivery.</li>
+        <li>Keep your receipt for any refund or dispute.</li>
+      </ul>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <h3>Quick links · روابط سريعة</h3>
+      <ul>
+        <li><a href="#" style="color:var(--brand);text-decoration:none">Find a branch</a></li>
+        <li><a href="#" style="color:var(--brand);text-decoration:none">PO Box services</a></li>
+        <li><a href="#" style="color:var(--brand);text-decoration:none">Calculate postage</a></li>
+      </ul>
+    </div>
+  </aside>
+</div></main>
+
+<footer class="site"><div class="wrap">
+  <div class="fcols">
+    <div>
+      <h4>Emirates Post</h4>
+      <p>The national postal operator of the United Arab Emirates — mail, parcels, courier and PO Box services.</p>
+      <p>بريد الإمارات — المشغل الوطني للبريد</p>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <a href="#">Track &amp; trace</a><a href="#">Send a parcel</a><a href="#">PO Box</a><a href="#">Courier</a>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <a href="#">Contact us</a><a href="#">Branches</a><a href="#">Report fraud</a>
+    </div>
+    <div>
+      <h4>Legal</h4>
+      <a href="#">Privacy policy</a><a href="#">Terms of use</a>
+    </div>
+  </div>
+  <div class="fbottom">
+    <span>© 2026 Emirates Post Group. All rights reserved.</span>
+    <span>600 599 999 · care@emiratespost.ae</span>
+  </div>
+</div></footer>
+</body>
+</html>
