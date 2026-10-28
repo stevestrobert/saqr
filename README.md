@@ -46,7 +46,7 @@ saqr serve --source ctlogs          # production-style: tail Google Argon/Xenon 
 saqr watch --seconds 60             # terminal only: live feed + matcher, no browser
 saqr match rta-fines-refund.com xn--tx-refund-gov-w1k.com www.rta.ae
 saqr verify https://example.com     # one-off verification of a URL
-saqr evidence verify var/evidence/<case_id>   # recompute hashes, Merkle root, timestamp signature
+saqr evidence verify var/evidence/<case_id>/<package_id>   # recompute hashes, Merkle root, timestamp signature
 docker compose up --build           # container with Chromium preinstalled; dashboard on :8000
 ```
 
@@ -78,7 +78,7 @@ replicas with original artwork, served only on localhost):
 
 ![Evidence report](docs/images/evidence-report.png)
 
-Each package (`var/evidence/<case>/`) contains `manifest.json` with SHA-256 for every artefact and a Merkle root, a
+Each package (`var/evidence/<case>/<package>/`, never overwritten) contains `manifest.json` with SHA-256 for every artefact and a Merkle root, a
 time-stamp token over `sha256(manifest.json)` (RFC 3161 from a public TSA when reachable, otherwise an Ed25519 signature
 by the node key — the package says which), `chain_of_custody.json`, `report.html` and `package.zip`. Anyone can
 re-verify it offline with `saqr evidence verify <dir>` or with `sha256sum` and `openssl ts -verify`.

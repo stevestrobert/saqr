@@ -70,13 +70,22 @@ def decide(*, capture: Capture, match: MatchResult | None, cert: CertEntry | Non
     page_host = (capture.final_url or capture.requested_url).split("//")[-1].split("/")[0].lower()
 
     # Safety net (the sensing layer never creates candidates for official properties, but the verdict must
-    # be impossible to get wrong): an allow-listed name is official, whatever the page looks like.
-    for name in (domain, page_host):
-        if name and reg.is_allowlisted(name):
-            return Verdict(label=VerdictLabel.official, risk=0, confidence=1.0,
-                           components={"visual": 0, "logo": 0, "text": 0, "form": 0, "domain": 0},
-                           explanations=[f"{name} is an official government property on the protected registry; it can never be flagged or blocked."],
-                           recommended_action="None", encoder=encoder)
+    # be impossible to get wrong): an allow-listed *candidate* name is official, whatever the page looks like.
+    domain = (domain or "").lower().strip(".")
+    if domain and reg.is_allowlisted(domain):
+        return Verdict(label=VerdictLabel.official, risk=0, confidence=1.0,
+                       components={"visual": 0, "logo": 0, "text": 0, "form": 0, "domain": 0},
+                       explanations=[f"{domain} is an official government property on the protected registry; it can never be flagged or blocked."],
+                       recommended_action="None", encoder=encoder)
+    # A look-alike that forwards the browser to the real portal is cloaking (or a dormant kit), never an exoneration:
+    # phishing kits often redirect bots and desktop visitors to the official site and serve the fake to phones.
+    if page_host and domain and page_host != domain and not page_host.endswith("." + domain) and reg.is_allowlisted(page_host):
+        dom = domain_signals(match, cert, reg)
+        return Verdict(label=VerdictLabel.inactive, risk=min(60, 30 + int(dom.score * 30)), confidence=0.6,
+                       components={"visual": 0, "logo": 0, "text": 0, "form": 0, "domain": dom.score},
+                       explanations=[f"The browser was redirected to the official site {page_host}: a common cloaking technique (bots and desktop "
+                                     "visitors see the real portal, phones get the fake). The name stays under watch and is re-checked with other client profiles."],
+                       recommended_action="Monitor and re-check", domain=dom, encoder=encoder)
 
     # Unreachable / parked / empty pages: nothing to judge yet — schedule a re-check.
     if not capture.ok or capture.text_length < 40 or _looks_parked(capture):

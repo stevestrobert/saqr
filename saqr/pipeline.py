@@ -55,6 +55,8 @@ from .verification.visual import build_encoder, load_image
 
 log = logging.getLogger(__name__)
 
+DISPATCHED_STATES = (CaseState.approved, CaseState.blocked, CaseState.taken_down, CaseState.false_positive)
+
 
 class Pipeline:
     def __init__(self, settings: Settings, store: Store, bus: EventBus) -> None:
@@ -144,6 +146,7 @@ class Pipeline:
             except (asyncio.CancelledError, Exception):
                 pass
         self._tasks.clear()
+        self.dispatcher.cancel_follow_ups()
         await self.capturer.close()
 
     # ======================================================================================== sensing
@@ -269,8 +272,17 @@ class Pipeline:
             except Exception as exc:
                 log.exception("verification of %s failed: %s", cand.domain, exc)
                 self.bus.publish("verification", {"candidate_id": cand.id, "domain": cand.domain, "stage": "error", "message": str(exc)[:200]})
-                cand.status = CandidateStatus.verified
+                # never drop a candidate silently: retry on the re-check schedule, give up only after recheck_max
+                cand.recheck_count += 1
+                if cand.recheck_count <= self.settings.recheck_max:
+                    cand.status = CandidateStatus.rechecking
+                    cand.next_recheck_at = utcnow() + timedelta(seconds=self.settings.recheck_interval_s / max(0.1, self.settings.demo_speed))
+                else:
+                    cand.status = CandidateStatus.verified
                 self.store.put(cand)
+                self.audit.record("system", "verification.error", cand.id, domain=cand.domain, error=str(exc)[:200],
+                                  retry=cand.status == CandidateStatus.rechecking)
+                self.bus.publish("candidate", cand)
             finally:
                 self.queue.task_done()
 
@@ -304,6 +316,23 @@ class Pipeline:
         now = utcnow()
         case = self.store.get(Case, cand.case_id) if cand.case_id else None
         is_recheck = case is not None
+        prev_label = case.verdict.label if case else None
+        if case is not None and case.state in DISPATCHED_STATES:
+            # A case that has been acted on keeps its approved verdict, state and sealed evidence. The re-check only
+            # records whether the page is still reachable (which is how a takedown gets confirmed).
+            case.capture = cap
+            still_up = verdict.label != VerdictLabel.inactive
+            case.add_event("recheck", "Re-checked after response: page still reachable" if still_up else "Re-checked: page no longer reachable",
+                           f"{verdict.label.value} · risk {verdict.risk}/100", at=now)
+            cand.status, cand.next_recheck_at = CandidateStatus.verified, None
+            self.store.put(case)
+            self.store.put(cand)
+            self.audit.record("system", "case.rechecked", case.id, domain=case.domain, verdict=verdict.label.value, risk=verdict.risk,
+                              state=case.state.value, note="post-response re-check; state and evidence preserved")
+            self.bus.publish("candidate", cand)
+            self.bus.publish("case", case_summary(case, self.store, cand))
+            self._stage(cand, "done", f"post-response re-check: {verdict.label.value}")
+            return case
         if case is None:
             case = Case(candidate_id=cand.id, domain=cand.domain, url=cand.url, source=cand.source, detected_at=cand.first_seen,
                         issued_at=cand.issued_at, verdict=verdict, capture=cap, report_ids=list(cand.report_ids))
@@ -360,8 +389,9 @@ class Pipeline:
             self.store.put(case)
             self.bus.publish("campaign", camp)
 
-        # evidence package for anything that may be acted on
-        if verdict.label in (VerdictLabel.confirmed_fake, VerdictLabel.suspicious):
+        # evidence package for anything that may be acted on; a sealed package is never replaced — a re-check that
+        # changes the verdict adds a new package next to it (both stay verifiable, the latest is served)
+        if verdict.label in (VerdictLabel.confirmed_fake, VerdictLabel.suspicious) and (case.evidence_id is None or prev_label != verdict.label):
             self._stage(cand, "evidence", "building the evidence package (hashes, DNS, RDAP, certificate, hosting, timestamp)")
             pkg = await self.evidence.build(case, cert, demo_override=bool(override))
             self.store.put(pkg)
@@ -528,6 +558,7 @@ class Pipeline:
         for model in (Action, EvidencePackage, Case, Candidate, Report, Campaign, CertEntry):
             for item in self.store.list(model, order=""):
                 self.store.delete(model, item.id)
+        self.dispatcher.cancel_follow_ups()
         self.feed.clear()
         self.certs_seen = self.certs_candidates = 0
         self._rate_window.clear()

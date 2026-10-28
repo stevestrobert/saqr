@@ -109,7 +109,8 @@ class LookalikeMatcher:
                 break
             flat = pd.replace(".", "")
             flat_ok = len(flat) >= 5  # 'uae' (u.ae) is a cue, not an embedded domain
-            if (f".{pd}." in f".{skel}." and skel != pd) or f"{pd}." in skel or skel.startswith(pd + ".") or \
+            # bounded on both sides: 'rta.ae.secure-login.com' yes, 'smarta.ae.pages.dev' no
+            if (f".{pd}." in f".{skel}." and skel != pd) or \
                f"{pd.replace('.', '-')}" in parts.label or (flat_ok and (f"www-{flat}" in skel or parts.label == flat or
                parts.label.startswith(flat + "-") or parts.label.endswith("-" + flat))):
                 reasons.append(MatchReason(kind="embedded_domain", weight=W_EMBEDDED,

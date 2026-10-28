@@ -62,11 +62,10 @@ class EvidenceBuilder:
 
     async def build(self, case: Case, cert: CertEntry | None, *, demo_override: bool, actor: str = "system") -> EvidencePackage:
         s = self.settings
-        out = s.evidence_dir / case.id
-        if out.exists():
-            shutil.rmtree(out)
-        out.mkdir(parents=True)
-        pkg = EvidencePackage(case_id=case.id, domain=case.domain, directory=str(out))
+        pkg = EvidencePackage(case_id=case.id, domain=case.domain, directory="")
+        out = s.evidence_dir / case.id / pkg.id   # one directory per package; a sealed package is never overwritten
+        out.mkdir(parents=True, exist_ok=False)
+        pkg.directory = str(out)
         custody: list[CustodyEvent] = []
 
         def log(event: str, detail: str = "") -> None:

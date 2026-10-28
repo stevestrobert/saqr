@@ -116,14 +116,19 @@ class Scenario:
                 elapsed = (time.time() - self.started_at) * self.speed
                 for s in self.steps:
                     if not s.fired and elapsed >= s.at:
-                        await self.fire(s.id)
+                        try:
+                            await self.fire(s.id)
+                        except Exception as exc:  # a broken step must not kill the scenario
+                            log.exception("scenario step %s failed: %s", s.id, exc)
+                            self.pipeline.bus.publish("demo", {"step_id": s.id, "label": f"Step {s.id} failed: {exc}", "kind": "error"})
                 if all(s.fired for s in self.steps):
-                    self.running = False
                     self.pipeline.bus.publish("demo", {"step_id": None, "label": "Scenario complete", "kind": "end"})
                     break
                 await asyncio.sleep(0.5)
         except asyncio.CancelledError:
             pass
+        finally:
+            self.running = False
 
     async def fire(self, step_id: str) -> dict:
         step = next((s for s in self.steps if s.id == step_id), None)
@@ -142,10 +147,11 @@ class Scenario:
             domain = d["domain"]
             cand = self.pipeline.store.candidate_by_domain(domain)
             if cand and cand.case_id:
-                cand.status = CandidateStatus.queued
-                self.pipeline.store.put(cand)
-                self.pipeline._stage(cand, "recheck", "scheduled re-check (page changed since last visit)")
-                self.pipeline.queue.put_nowait(cand)
+                if cand.status not in (CandidateStatus.queued, CandidateStatus.verifying):  # never two verifications at once
+                    cand.status = CandidateStatus.queued
+                    self.pipeline.store.put(cand)
+                    self.pipeline._stage(cand, "recheck", "scheduled re-check (page changed since last visit)")
+                    self.pipeline.queue.put_nowait(cand)
             elif not cand:
                 self.pipeline.enqueue_candidate(domain, f"https://{domain}/", Source.manual, match=self.pipeline.matcher.match(domain), note="activated")
         self.pipeline.audit.record("presenter", "demo.step", step.id, kind=step.kind, label=step.label)

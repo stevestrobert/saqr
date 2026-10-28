@@ -103,9 +103,20 @@ class Dispatcher:
         self._tasks.add(t)
         t.add_done_callback(self._tasks.discard)
 
+    def cancel_follow_ups(self) -> None:
+        """Stop pending simulated acknowledgements (shutdown, demo reset)."""
+        for t in list(self._tasks):
+            t.cancel()
+        self._tasks.clear()
+
+    def _still_exists(self, action: Action) -> bool:
+        return self.store.get(Action, action.id) is not None
+
     async def _follow_up(self, action: Action, receipt) -> None:
         """Simulated partner acknowledgement and completion (in live mode these arrive via webhooks / mailbox polling)."""
         await asyncio.sleep(receipt.ack_delay_s * self.ack_scale)
+        if not self._still_exists(action):
+            return  # the case was wiped (demo reset) while the partner was "thinking"
         action.status, action.acknowledged_at = ActionStatus.acknowledged, datetime.now(timezone.utc)
         self.store.put(action)
         self.on_action(action)
@@ -113,6 +124,8 @@ class Dispatcher:
             await self._mark_blocked(action)
         if receipt.completes:
             await asyncio.sleep(receipt.completion_delay_s * self.ack_scale)
+            if not self._still_exists(action):
+                return
             action.status, action.completed_at = ActionStatus.completed, datetime.now(timezone.utc)
             self.store.put(action)
             self.on_action(action)

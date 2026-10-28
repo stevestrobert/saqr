@@ -104,7 +104,8 @@ model calibrated on historical impersonation cases plugs in with the same inputs
 
 ## Qualify
 
-`evidence/package.py` builds `var/evidence/<case>/` with screenshots, `page.html`, `page.txt`, `capture.json`,
+`evidence/package.py` builds `var/evidence/<case>/<package>/` (a sealed package is never modified or replaced; a
+re-check that changes the verdict adds a new one) with screenshots, `page.html`, `page.txt`, `capture.json`,
 `network.har`, `dns.json`, `registration.json` (RDAP), `certificate.json`/`.pem`, `hosting.json` (IP→ASN via Team Cymru
 DNS, abuse contacts via RDAP), `ct_entry.json` (log URL + index: anyone can re-fetch the leaf), `iocs.json`,
 `verdict.json`, then `manifest.json` (SHA-256 of every artefact, Merkle root, tool versions, operator), a time-stamp

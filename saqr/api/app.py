@@ -375,14 +375,20 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         if (dist / "assets").exists():
             app.mount("/assets", StaticFiles(directory=str(dist / "assets")), name="assets")
 
+        root = dist.resolve()
+
         @app.get("/{full_path:path}", include_in_schema=False)
         def spa(full_path: str):
             if full_path.startswith("api/") or full_path.startswith("ws"):
                 raise HTTPException(404)
-            candidate = dist / full_path
-            if full_path and candidate.is_file():
+            try:
+                candidate = (root / full_path).resolve()
+            except (OSError, ValueError):
+                candidate = root / "index.html"
+            # only files inside the bundle are served; '..' segments (also percent-encoded) fall back to the SPA
+            if full_path and root in candidate.parents and candidate.is_file():
                 return FileResponse(candidate)
-            return FileResponse(dist / "index.html")
+            return FileResponse(root / "index.html")
     else:
         @app.get("/", include_in_schema=False)
         def root():

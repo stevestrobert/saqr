@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import logging
 import random
 import time
 from dataclasses import dataclass, field
@@ -16,6 +17,8 @@ from datetime import datetime, timedelta, timezone
 from typing import AsyncIterator
 
 from ...models import CertEntry, Source
+
+log = logging.getLogger(__name__)
 
 WORDS = ["alpha", "beta", "cedar", "delta", "ember", "falcon", "garden", "harbor", "island", "jasper", "kite", "lumen", "maple", "nova", "orbit", "pixel", "quartz", "river", "sierra", "tango", "umber", "violet", "willow", "xenon", "yonder", "zephyr", "atlas", "bloom", "canvas", "dune", "echo", "forge", "grove", "hazel", "iris", "juno", "koala", "lotus", "mesa", "nimbus", "opal", "pearl", "quill", "ridge", "sage", "tide", "ultra", "vista", "wave", "yarrow", "zinc", "aero", "brick", "cloud", "data", "edge", "flux", "glow", "hub", "ion", "jet", "kernel", "loop", "meta", "node", "onyx", "peak", "quest", "rail", "stack", "trail", "unit", "vault", "wire", "axis", "byte", "core", "dash", "eon", "frame", "grid", "hive", "index", "joint", "key", "lane", "mode", "nest", "oak", "port", "rune", "spark", "tile", "urban", "vine", "web", "yard", "bakery", "bistro", "cafe", "clinic", "dental", "fitness", "florist", "garage", "hotel", "kitchen", "laundry", "market", "pharmacy", "salon", "studio", "tailor", "travel", "yoga", "academy", "agency", "capital", "consulting", "digital", "global", "holdings", "industries", "logistics", "media", "partners", "realty", "solutions", "systems", "ventures", "works", "marina", "palm", "beach", "desert", "oasis", "souk", "falconry", "pearl", "coral", "apartments", "properties", "motors", "trading", "electronics", "furniture", "fashion", "jewellery", "perfume", "carpets", "textiles"]
 FIRST_NAMES = ["ahmed", "sara", "omar", "fatima", "khalid", "mariam", "yousef", "layla", "hamad", "noor", "ali", "hessa", "rashid", "aisha", "salem"]
@@ -152,6 +155,7 @@ class HybridSource:
     def __init__(self, live, replay: ReplaySource) -> None:
         self.live = live
         self.replay = replay
+        self.live_error: str | None = None
 
     def inject(self, *args, **kwargs) -> None:
         self.replay.inject(*args, **kwargs)
@@ -160,8 +164,15 @@ class HybridSource:
         queue: asyncio.Queue[CertEntry] = asyncio.Queue(maxsize=5000)
 
         async def pump_live() -> None:
-            async for e in self.live.stream():
-                await queue.put(e)
+            try:
+                async for e in self.live.stream():
+                    await queue.put(e)
+                self.live_error = "live certificate stream ended"
+            except asyncio.CancelledError:
+                raise
+            except Exception as exc:  # keep serving injections, but say loudly that the live feed is gone
+                self.live_error = f"{type(exc).__name__}: {exc}"[:200]
+                log.exception("hybrid: live certificate stream failed: %s", exc)
 
         async def pump_injections() -> None:
             start = time.time()
@@ -190,4 +201,7 @@ class HybridSource:
         s = self.live.stats()
         s["source"] = "hybrid"
         s["planted"] = self.replay.stats.planted
+        if self.live_error:
+            s["online"] = False
+            s["last_error"] = self.live_error
         return s
