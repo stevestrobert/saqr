@@ -100,7 +100,8 @@ type CaseDetail = {
 | GET | `/api/demo` | | `DemoState` |
 | POST | `/api/demo/start` | `{ speed?: number }` | `DemoState` |
 | POST | `/api/demo/stop` | | `DemoState` |
-| POST | `/api/demo/reset` | | `DemoState` (wipes cases/candidates/reports, keeps registry) |
+| POST | `/api/demo/speed` | `{ speed: number }` | `DemoState` — changes the multiplier without restarting (scenario clock is re-based) |
+| POST | `/api/demo/reset` | | `DemoState` (wipes cases/candidates/reports, keeps registry; emits a `demo` event with `kind: "reset"`) |
 | POST | `/api/demo/inject` | `{ domain: string, issuer?: string }` | `{ injected: true }` plants a certificate in the live feed now |
 | POST | `/api/demo/step` | `{ step_id: string }` | `DemoState` fires a scenario step immediately |
 

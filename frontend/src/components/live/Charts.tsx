@@ -10,7 +10,8 @@ export function FunnelCard() {
   const f = metrics?.funnel ?? {};
   const stages = [
     { key: 'certs_seen', label: 'Certs seen', value: f.certs_seen ?? metrics?.certs_seen ?? 0 },
-    { key: 'filtered', label: 'Passed filter', value: f.filtered ?? f.candidates ?? metrics?.candidates ?? 0 },
+    // `funnel.filtered` is the number of certificates the filter DISCARDED; what passed is `candidates`.
+    { key: 'candidates', label: 'Passed filter', value: f.candidates ?? metrics?.candidates ?? 0 },
     { key: 'verified', label: 'Verified', value: f.verified ?? 0 },
     { key: 'confirmed', label: 'Confirmed fake', value: f.confirmed ?? metrics?.cases_confirmed ?? 0 },
     { key: 'blocked', label: 'Blocked', value: f.blocked ?? metrics?.cases_blocked ?? 0 },

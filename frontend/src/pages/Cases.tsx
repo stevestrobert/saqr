@@ -20,7 +20,8 @@ type SortKey = 'detected_at' | 'risk' | 'report_count' | 'state' | 'domain' | 'p
 const STATES: CaseState[] = ['open', 'approved', 'blocked', 'taken_down', 'monitoring', 'false_positive', 'closed'];
 const VERDICTS: VerdictLabel[] = ['confirmed_fake', 'suspicious', 'benign', 'inactive', 'official'];
 
-const progressOf = (c: CaseSummary) => (c.action_summary.total ? (c.action_summary.acknowledged + c.action_summary.completed) / c.action_summary.total : -1);
+// action_summary buckets are cumulative: `sent` includes acknowledged and completed, `acknowledged` includes completed.
+const progressOf = (c: CaseSummary) => (c.action_summary.total ? c.action_summary.acknowledged / c.action_summary.total : -1);
 
 export function Cases() {
   const navigate = useNavigate();
@@ -212,15 +213,15 @@ export function Cases() {
                     <td className="px-3 py-2 text-right tnum text-ink-2">{c.report_count || <span className="text-ink-4">0</span>}</td>
                     <td className="px-3 py-2">
                       {c.action_summary.total > 0 ? (
-                        <div className="flex items-center gap-2" title={`${c.action_summary.acknowledged + c.action_summary.completed} of ${c.action_summary.total} partners confirmed · ${c.action_summary.failed} failed`}>
+                        <div className="flex items-center gap-2" title={`${c.action_summary.acknowledged} of ${c.action_summary.total} partners confirmed · ${c.action_summary.failed} failed`}>
                           <div className="w-16 h-1.5 rounded-full bg-line overflow-hidden flex">
                             <div className="h-full bg-emerald" style={{ width: `${(c.action_summary.completed / c.action_summary.total) * 100}%` }} />
-                            <div className="h-full bg-gold" style={{ width: `${(c.action_summary.acknowledged / c.action_summary.total) * 100}%` }} />
-                            <div className="h-full bg-sky" style={{ width: `${(c.action_summary.sent / c.action_summary.total) * 100}%` }} />
+                            <div className="h-full bg-gold" style={{ width: `${((c.action_summary.acknowledged - c.action_summary.completed) / c.action_summary.total) * 100}%` }} />
+                            <div className="h-full bg-sky" style={{ width: `${((c.action_summary.sent - c.action_summary.acknowledged) / c.action_summary.total) * 100}%` }} />
                             <div className="h-full bg-red" style={{ width: `${(c.action_summary.failed / c.action_summary.total) * 100}%` }} />
                           </div>
                           <span className="tnum text-[11.5px] text-ink-2">
-                            {c.action_summary.acknowledged + c.action_summary.completed}/{c.action_summary.total}
+                            {c.action_summary.acknowledged}/{c.action_summary.total}
                           </span>
                           {prog >= 0 && c.action_summary.blocking_confirmed && <span className="text-[10.5px] text-emerald">blocking ✓</span>}
                         </div>

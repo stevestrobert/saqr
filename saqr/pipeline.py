@@ -584,4 +584,7 @@ class Pipeline:
             self.queue.get_nowait()
         self.audit.record("analyst", "demo.reset", self.settings.node_name)
         self.bus.history.clear()
+        # Connected dashboards drop their cached cases/candidates on this event (the history is gone too,
+        # so a page that reconnects later starts clean as well).
+        self.bus.publish("demo", {"step_id": None, "label": "Demo reset — all cases, candidates and reports wiped", "kind": "reset"})
         self.bus.publish("metrics", self.metrics())

@@ -99,7 +99,7 @@ export function stageOf(d: Detection): StageStatus {
   if (c) {
     const sum = c.action_summary;
     if (c.state === 'blocked' || c.state === 'taken_down') {
-      const confirmed = sum.acknowledged + sum.completed;
+      const confirmed = sum.acknowledged; // cumulative bucket: includes completed
       return {
         index: 5,
         active: false,
@@ -111,7 +111,7 @@ export function stageOf(d: Detection): StageStatus {
       return {
         index: 5,
         active: true,
-        message: `dispatching · ${sum.sent + sum.acknowledged + sum.completed}/${sum.total} sent · ${sum.acknowledged + sum.completed} acknowledged`,
+        message: `dispatching · ${sum.sent}/${sum.total} sent · ${sum.acknowledged} acknowledged`,
         tone: 'sky',
       };
     }

@@ -61,3 +61,23 @@ def test_digits_do_not_corrupt_tokenisation_but_still_catch_substitutions():
     r = m.match("rt4-fines.com")
     assert r.is_candidate and "rta" in r.tokens              # whole chunk 'rt4' spells the brand after mapping
     assert m.match("m0i-fines.com").is_candidate
+
+
+def test_speed_change_keeps_the_scenario_clock_and_reset_announces_itself(tmp_path: Path):
+    settings = Settings(data_dir=tmp_path / "var", ct_source="none", tsa_urls="", demo_autostart=False)
+    with TestClient(create_app(settings)) as c:
+        state = c.post("/api/demo/start", json={"speed": 1}).json()
+        assert state["running"] and state["speed"] == 1
+        scenario = c.app.state.scenario
+        scenario.started_at -= 10  # pretend 10 s of scenario time have passed
+        faster = c.post("/api/demo/speed", json={"speed": 4}).json()
+        assert faster["speed"] == 4
+        assert 9.5 <= faster["elapsed_s"] <= 11, "changing the multiplier must not jump the scenario clock"
+        # starting again with a speed while running only changes the speed, never restarts
+        again = c.post("/api/demo/start", json={"speed": 2}).json()
+        assert again["running"] and again["speed"] == 2 and 9.5 <= again["elapsed_s"] <= 12
+        c.post("/api/demo/stop")
+        c.post("/api/demo/reset")
+        history = list(c.app.state.bus.history)
+        assert any(e["type"] == "demo" and e["data"].get("kind") == "reset" for e in history)
+        assert c.get("/api/cases").json() == []

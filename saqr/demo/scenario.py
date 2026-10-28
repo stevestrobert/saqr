@@ -88,8 +88,21 @@ class Scenario:
                 "elapsed_s": round(elapsed, 1), "sites_url": "/demo-sites/", "steps": [s.as_dict() for s in self.steps],
                 "sites": self.sites_available()}
 
+    def set_speed(self, speed: float) -> dict:
+        """Change the time multiplier without restarting. While running, the scenario clock is re-based so the
+        elapsed scenario time stays the same (otherwise a jump from ×1 to ×4 would fire several steps at once)."""
+        new = max(0.1, float(speed))
+        if self.running and self.started_at:
+            elapsed = (time.time() - self.started_at) * self.speed
+            self.started_at = time.time() - elapsed / new
+        self.speed = new
+        self.pipeline.bus.publish("demo", {"step_id": None, "label": f"Scenario speed ×{self.speed:g}", "kind": "speed"})
+        return self.state()
+
     async def start(self, speed: float | None = None) -> dict:
         if speed:
+            if self.running:
+                return self.set_speed(speed)
             self.speed = max(0.1, float(speed))
         if self.running:
             return self.state()

@@ -282,14 +282,14 @@
   <div class="kicker in">Stage 2 · Assess</div>
   <h1 class="in" style="--d:.05s">Does it look official — and does it ask for a card?</h1>
   <div class="cmp in" style="--d:.15s">
-    <div><div class="label"><i style="background:var(--emerald)"></i>Official page · <span class="mono muted">rta.ae</span></div><div class="shot"><img src="img/official-rta.png" alt="official page"><span class="badge emerald pop" style="--d:1.2s;left:22px;top:22px">reference gallery</span></div></div>
-    <div><div class="ring pop" style="--d:.8s"><b class="red" id="riskcounter">0</b><span>risk / 100</span></div><div style="text-align:center;margin-top:18px;font-size:20px;color:var(--ink3)">93% visual<br>emblem 100%</div></div>
-    <div><div class="label"><i style="background:var(--red)"></i>Suspect page · <span class="mono muted">rta-fines-refund.com</span></div><div class="shot"><img src="img/clone-rta.png" alt="clone"><span class="badge pop" style="--d:1.4s;left:22px;top:22px">same emblem · same layout</span><span class="badge pop" style="--d:1.8s;left:22px;top:300px">“claim within 24 h”</span><span class="badge pop" style="--d:2.2s;left:22px;top:560px">card number · expiry · CVV · OTP</span></div></div>
+    <div><div class="label"><i style="background:var(--emerald)"></i>Reference · <span class="mono muted">rta.ae</span> <span class="muted" style="font-weight:400">(demo replica)</span></div><div class="shot"><img src="img/official-rta.png" alt="reference page"><span class="badge emerald pop" style="--d:1.2s;left:22px;top:22px">reference gallery</span></div></div>
+    <div><div class="ring pop" style="--d:.8s"><b class="red" id="riskcounter">0</b><span>risk / 100</span></div><div style="text-align:center;margin-top:18px;font-size:20px;color:var(--ink3)">layout 93 %<br>emblem match<br><span style="font-size:16px">on demo fixtures</span></div></div>
+    <div><div class="label"><i style="background:var(--red)"></i>Suspect · <span class="mono muted">rta-fines-refund.com</span> <span class="muted" style="font-weight:400">(demo clone)</span></div><div class="shot"><img src="img/clone-rta.png" alt="clone"><span class="badge pop" style="--d:1.4s;left:22px;top:22px">same emblem · same layout</span><span class="badge pop" style="--d:1.8s;left:22px;top:300px">“claim within 24 h”</span><span class="badge pop" style="--d:2.2s;left:22px;top:560px">card number · expiry · CVV · OTP</span></div></div>
   </div>
   <div class="verdict in" style="--d:.5s"><span class="pill red">confirmed fake</span><span class="pill">layout copied</span><span class="pill">RTA emblem reused</span><span class="pill">collects card + OTP</span><span class="pill">certificate minutes old, free CA</span><span class="pill emerald">gym site with the same word → cleared</span></div>
   <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>6</span></div>
   <aside class="notes">
-    <p>Left: the real page from our reference gallery. Right: the candidate, opened in a throw-away browser at desktop and phone size. Four independent signals: the layout matches at 93 %, the emblem is a pixel copy, the text claims to be RTA with urgency cues, and the form asks for card number, expiry, CVV and the SMS one-time code — official portals hand off to a licensed gateway and never collect a card on an inquiry page. Fused risk 90 out of 100, confirmed fake, with reasons in plain language. The same stage clears false positives: a gym called rta-ae-fitness passes the name filter and is cleared here; parked names go into a re-check loop and are caught when they go live. The encoder is pluggable: DINOv3 when installed, a dependency-free perceptual encoder in this demo.</p>
+    <p>Left: the reference page from our gallery — in the demo this is a replica we built of the RTA fines page (original artwork, served on localhost); in deployment the gallery is built from live screenshots of the real portals. Right: the candidate, opened in a throw-away browser at desktop and phone size. Four independent signals: the layout matches at 93 % (perceptual encoder; structural similarity 0.74–0.78), the emblem is found by template matching, the text claims to be RTA with urgency cues, and the form asks for card number, expiry, CVV and the SMS one-time code — official portals hand off to a licensed gateway and never collect a card on an inquiry page. Fused risk 90 out of 100, confirmed fake, with reasons in plain language. The same stage clears false positives: a gym called rta-ae-fitness passes the name filter and is cleared here; parked names go into a re-check loop and are caught when they go live. The encoder is pluggable: DINOv3 when installed, a dependency-free perceptual encoder in this demo. If asked: these numbers are from our own fixture set, not from real scam pages yet.</p>
   </aside>
 </section>
 
@@ -346,15 +346,15 @@
 
 <!-- 9 · Results ------------------------------------------------------------------------------------ -->
 <section class="slide" data-title="Results">
-  <div class="kicker in">Measured in the demo</div>
-  <h1 class="in" style="--d:.05s">6 seconds to identify. 3 minutes to block — including the human.</h1>
+  <div class="kicker in">Time budget · demo run</div>
+  <h1 class="in" style="--d:.05s">Seconds to identify. Minutes to block — including the human.</h1>
   <div class="timeline in" style="--d:.15s">
     <div class="tn"><div class="dot grey"></div><div class="tl">Certificate logged</div></div>
     <div class="tn"><div class="dot"></div><div class="tl">Detected</div><div class="gap">+6 s</div></div>
     <div class="tn"><div class="dot"></div><div class="tl">Verified · risk 90</div><div class="gap">+7 s</div></div>
     <div class="tn"><div class="dot"></div><div class="tl">Evidence sealed</div><div class="gap">+0 s</div></div>
     <div class="tn"><div class="dot gold"></div><div class="tl">Analyst approved</div><div class="gap">+2 min 46 s</div></div>
-    <div class="tn"><div class="dot emerald"></div><div class="tl">Blocked by telecoms</div><div class="gap">+1 s</div></div>
+    <div class="tn"><div class="dot emerald"></div><div class="tl">Telecom ack <span class="muted" style="font-weight:400;font-size:17px">(simulated)</span></div><div class="gap">+1 s</div></div>
   </div>
   <div class="bars in" style="--d:.4s">
     <div>Time to identify · today</div><div class="b"><i style="width:100%;background:#475569"></i></div><div class="v muted">~9 h</div>
@@ -362,10 +362,10 @@
     <div>Exposure · today</div><div class="b"><i style="width:100%;background:#475569;animation-delay:.5s"></i></div><div class="v muted">~48 h</div>
     <div>Exposure · SAQR</div><div class="b"><i style="width:2%;min-width:10px;background:var(--emerald);animation-delay:.8s"></i></div><div class="v emerald">3 min</div>
   </div>
-  <p class="in" style="--d:.7s;font-size:21px;color:var(--ink3);margin-top:34px">Anchored on the public certificate timestamp — anyone can recompute it from the log entry in the evidence package. Baselines are documented assumptions, to be replaced by historical case data. Targets: −70 % and −50 %.</p>
+  <p class="in" style="--d:.7s;font-size:21px;color:var(--ink3);margin-top:34px">Pipeline steps measured in the offline demo; with the live feed the clock starts at the public certificate timestamp, which anyone can recompute from the log entry in the evidence package. Partner acknowledgements are simulated. Baselines are documented assumptions, to be replaced by historical case data. Targets: −70 % and −50 %.</p>
   <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>9</span></div>
   <aside class="notes">
-    <p>These are real timestamps from a demo run. Certificate logged; six seconds later the name is a candidate; seven seconds later it is verified and the evidence is sealed; the analyst took under three minutes to approve; one second later the telecom block was acknowledged. Time-to-identify is measured from the public certificate timestamp, so anyone can recompute it from the log entry we store. Against a conservative complaint-driven baseline of nine hours and a takedown-only baseline of forty-eight hours, the challenge targets of 70 % and 50 % are met by construction — because today's delay is waiting for complaints and then waiting for takedowns, and SAQR removes both waits. Be upfront: the baselines are assumptions we will replace with the organisers' historical cases.</p>
+    <p>Read this as a time budget, not a benchmark. The pipeline steps are measured in the offline demo: the name becomes a candidate within seconds of the certificate appearing, verification and evidence sealing take a few seconds more, the analyst took under three minutes to approve, and the telecom acknowledgement comes back a second later — that last one is simulated, say so. In the offline replay the certificate timestamps are synthetic (the feed stamps each certificate a few seconds before it is shown); with the live feed the clock starts at the real public log timestamp, so anyone can recompute time-to-identify from the log entry we store. Against a conservative complaint-driven baseline of nine hours and a takedown-only baseline of forty-eight hours, the challenge targets of 70 % and 50 % are met by construction — because today's delay is waiting for complaints and then waiting for takedowns, and SAQR removes both waits. Be upfront: the baselines are assumptions we will replace with the organisers' historical cases.</p>
   </aside>
 </section>
 
@@ -409,6 +409,7 @@
         <span class="pill">meaningless names, wildcard certs, free hosting → reactive path only</span>
         <span class="pill">partner connectors simulated (real payloads, no credentials)</span>
         <span class="pill">perceptual encoder in the demo · DINOv3 plugs in</span>
+        <span class="pill">verifier evaluated on our own fixtures, not on real scam pages yet</span>
         <span class="pill">baselines are assumptions until historical data</span>
         <span class="pill">no authentication in the MVP</span>
       </div></div>
@@ -428,7 +429,7 @@
   </div>
   <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>12</span></div>
   <aside class="notes">
-    <p>Be honest before anyone asks. The certificate filter cannot see names with no recognisable word, wildcard certificates or free-hosting subdomains — those reach us reactively, through forwarded messages, bank and telecom reports and feeds, and then get exactly the same verification and one-click block. The partner connectors are simulated: realistic payloads and receipts, no live credentials. The demo runs a dependency-free perceptual encoder; DINOv3 plugs into the same interface. The baselines are assumptions. And there is no authentication in the MVP. Next ninety days: partner integrations, the model trained on historical cases, UAE PASS and a national time-stamping authority, a citizen reporting number, and more sensors.</p>
+    <p>Be honest before anyone asks. The certificate filter cannot see names with no recognisable word, wildcard certificates or free-hosting subdomains — those reach us reactively, through forwarded messages, bank and telecom reports and feeds, and then get exactly the same verification and one-click block. The partner connectors are simulated: realistic payloads and receipts, no live credentials. The demo runs a dependency-free perceptual encoder; DINOv3 plugs into the same interface, and the verifier has been evaluated on our own fixture pages, not on real scam pages yet. The baselines are assumptions. And there is no authentication in the MVP. Next ninety days: partner integrations, the model trained on historical cases, UAE PASS and a national time-stamping authority, a citizen reporting number, and more sensors.</p>
   </aside>
 </section>
 
@@ -477,14 +478,14 @@
     timers.forEach(clearInterval); timers = [];
     slides.forEach((s, k) => s.classList.toggle('active', k === n));
     cur = n;
-    history.replaceState(null, '', '#/' + (n + 1));
+    history.replaceState(null, '', '#slide-' + (n + 1));
     counter.textContent = `${n + 1} / ${slides.length}`;
     progress.style.width = ((n + 1) / slides.length * 100) + '%';
     const aside = slides[n].querySelector('.notes');
     notes.innerHTML = aside ? aside.innerHTML : '<p class="muted">—</p>';
     enter(slides[n]);
   }
-  function fromHash() { const m = location.hash.match(/#\/(\d+)/); go(m ? parseInt(m[1], 10) - 1 : 0); }
+  function fromHash() { const m = location.hash.match(/#(?:slide-|\/)?(\d+)$/); go(m ? parseInt(m[1], 10) - 1 : 0); }
   addEventListener('hashchange', fromHash);
   document.getElementById('prev').onclick = () => go(cur - 1);
   document.getElementById('next').onclick = () => go(cur + 1);

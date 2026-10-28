@@ -58,11 +58,29 @@ export function InfraPanel({ capture, evidence, candidate, loading }: { capture:
       </Card>
     );
   }
-  const hosting = evidence?.hosting;
-  const reg = evidence?.registration;
+  // Evidence shapes (saqr/evidence/collectors.py): hosting = { hosts: [{ ip, asn, as_name, country, abuse_contacts }] },
+  // registration = { registrar, abuse_contacts, events: { registration, expiration }, nameservers, domain_status, source },
+  // dns = { records: { A, AAAA, NS, MX, ... }, ips }, certificate = { issuer, not_before, not_after, sans, sha256 },
+  // ct_entry = { log, index, logged_at, is_precert, leaf_sha256 }.
+  const hostingRaw = evidence?.hosting;
+  const hosts = Array.isArray(hostingRaw?.hosts) ? (hostingRaw.hosts as Record<string, unknown>[]) : [];
+  const hosting: Dict = hosts[0] ?? hostingRaw;
+  const regRaw = evidence?.registration;
+  const regEvents = (regRaw?.events ?? {}) as Record<string, unknown>;
+  const reg: Dict = regRaw
+    ? {
+        ...regRaw,
+        created: regEvents.registration ?? regRaw.created,
+        expires: regEvents.expiration ?? regRaw.expires,
+        status: regRaw.domain_status ?? regRaw.status,
+        abuse_contact: regRaw.abuse_contacts ?? regRaw.abuse_contact,
+      }
+    : regRaw;
   const cert = evidence?.certificate;
   const ct = evidence?.ct_entry;
-  const dns = evidence?.dns;
+  const dnsRaw = evidence?.dns;
+  const dnsRecords = (dnsRaw?.records ?? {}) as Record<string, unknown>;
+  const dns: Dict = dnsRaw ? { ...dnsRaw, ns: dnsRecords.NS, resolver: Array.isArray(dnsRaw.resolvers) ? (dnsRaw.resolvers as unknown[])[0] : dnsRaw.resolver } : dnsRaw;
   const tls = capture?.tls;
 
   const extra = (d: Dict, used: string[]) =>
@@ -86,9 +104,9 @@ export function InfraPanel({ capture, evidence, candidate, loading }: { capture:
             { k: 'ASN', v: pick(hosting, 'asn', 'as_number', 'as'), mono: true },
             { k: 'provider', v: pick(hosting, 'org', 'provider', 'as_name', 'isp', 'name') },
             { k: 'country', v: pick(hosting, 'country', 'country_code') },
-            { k: 'abuse', v: pick(hosting, 'abuse_contact', 'abuse', 'abuse_email'), mono: true },
-            { k: 'nameservers', v: pick(dns, 'ns', 'nameservers'), mono: true },
-            ...extra(hosting, ['ip', 'ips', 'address', 'asn', 'as_number', 'as', 'org', 'provider', 'as_name', 'isp', 'name', 'country', 'country_code', 'abuse_contact', 'abuse', 'abuse_email']),
+            { k: 'abuse', v: pick(hosting, 'abuse_contacts', 'abuse_contact', 'abuse', 'abuse_email'), mono: true },
+            { k: 'nameservers', v: pick(dns, 'ns', 'nameservers') ?? pick(reg, 'nameservers'), mono: true },
+            ...extra(hosting, ['ip', 'ips', 'address', 'asn', 'as_number', 'as', 'org', 'provider', 'as_name', 'isp', 'name', 'country', 'country_code', 'abuse_contacts', 'abuse_contact', 'abuse', 'abuse_email']),
           ]}
         />
         <Group
@@ -100,9 +118,9 @@ export function InfraPanel({ capture, evidence, candidate, loading }: { capture:
             { k: 'expires', v: fmtMaybeDate(pick(reg, 'expires', 'expiration_date', 'expiry')) },
             { k: 'status', v: pick(reg, 'status', 'statuses') },
             { k: 'registrant', v: pick(reg, 'registrant', 'registrant_country', 'registrant_org') },
-            { k: 'abuse', v: pick(reg, 'abuse_contact', 'abuse_email', 'abuse'), mono: true },
+            { k: 'abuse', v: pick(reg, 'abuse_contact', 'abuse_contacts', 'abuse_email', 'abuse'), mono: true },
             { k: 'source', v: pick(reg, 'source', 'rdap_url') },
-            ...extra(reg, ['registrar', 'registrar_name', 'created', 'creation_date', 'registered', 'created_at', 'expires', 'expiration_date', 'expiry', 'status', 'statuses', 'registrant', 'registrant_country', 'registrant_org', 'abuse_contact', 'abuse_email', 'abuse', 'source', 'rdap_url']),
+            ...extra(reg, ['domain', 'registrar', 'registrar_name', 'created', 'creation_date', 'registered', 'created_at', 'expires', 'expiration_date', 'expiry', 'status', 'statuses', 'domain_status', 'registrant', 'registrant_country', 'registrant_org', 'abuse_contact', 'abuse_contacts', 'abuse_email', 'abuse', 'source', 'rdap_url', 'nameservers', 'note']),
           ]}
         />
         <Group
@@ -114,7 +132,7 @@ export function InfraPanel({ capture, evidence, candidate, loading }: { capture:
             { k: 'valid to', v: tls?.valid_to ? fmtDate(tls.valid_to) : fmtMaybeDate(pick(cert, 'not_after', 'valid_to')) },
             { k: 'protocol', v: tls?.protocol || pick(cert, 'protocol') },
             { k: 'SANs', v: tls?.sans?.length ? `${fmtInt(tls.sans.length)} · ${tls.sans.slice(0, 2).join(', ')}${tls.sans.length > 2 ? '…' : ''}` : pick(cert, 'sans', 'domains'), mono: true },
-            { k: 'sha-256', v: tls?.fingerprint_sha256 || pick(cert, 'fingerprint_sha256', 'fingerprint') ? <Mono value={tls?.fingerprint_sha256 || pick(cert, 'fingerprint_sha256', 'fingerprint')} n={16} /> : null },
+            { k: 'sha-256', v: tls?.fingerprint_sha256 || pick(cert, 'sha256', 'fingerprint_sha256', 'fingerprint') ? <Mono value={tls?.fingerprint_sha256 || pick(cert, 'sha256', 'fingerprint_sha256', 'fingerprint')} n={16} /> : null },
           ]}
         />
         <Group
@@ -123,9 +141,9 @@ export function InfraPanel({ capture, evidence, candidate, loading }: { capture:
           rows={[
             { k: 'log', v: pick(ct, 'log', 'log_name', 'name') },
             { k: 'index', v: pick(ct, 'index', 'leaf_index'), mono: true },
-            { k: 'logged', v: fmtMaybeDate(pick(ct, 'issued_at', 'timestamp', 'logged_at')) },
+            { k: 'logged', v: fmtMaybeDate(pick(ct, 'logged_at', 'issued_at', 'timestamp')) },
             { k: 'precert', v: ct && 'is_precert' in ct ? String(ct.is_precert) : null },
-            { k: 'leaf hash', v: pick(ct, 'fingerprint', 'leaf_hash') ? <Mono value={pick(ct, 'fingerprint', 'leaf_hash')} n={16} /> : null },
+            { k: 'leaf hash', v: pick(ct, 'leaf_sha256', 'fingerprint', 'leaf_hash') ? <Mono value={pick(ct, 'leaf_sha256', 'fingerprint', 'leaf_hash')} n={16} /> : null },
             { k: 'cert id', v: candidate?.cert_id ?? pick(ct, 'id'), mono: true },
             { k: 'first seen', v: candidate ? fmtExact(candidate.first_seen) : null },
           ]}

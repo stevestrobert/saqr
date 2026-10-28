@@ -2,6 +2,8 @@
 
 Start: `saqr demo` (offline, replayed feed) or `saqr demo --live` (real Certificate Transparency logs with the demo
 domains injected). Open http://localhost:8000. Press `p` for the Presenter drawer whenever you want to fire a step early.
+The slide deck is served by the same node at http://localhost:8000/deck (slide 11 embeds the live dashboard); the
+presenter script with timings and the click-by-click demo is `docs/presentation/presenter-notes.md`.
 
 | t | What the audience sees | What to say |
 |---|---|---|

@@ -1,12 +1,12 @@
 # SAQR — presenter notes
 
-Deck: `docs/presentation/index.html` (open the file, or `http://localhost:8000/docs/presentation/` when the node is
-running — then slide 11 embeds the live dashboard). Keys: `→` / `space` next · `←` back · `N` notes panel · `F`
+Deck: `docs/presentation/index.html` (open the file, or `http://localhost:8000/deck` when the node is running — then
+slide 11 embeds the live dashboard; `#slide-N` jumps to a slide). Keys: `→` / `space` next · `←` back · `N` notes panel · `F`
 fullscreen · `?` help. The same notes appear in the deck's `N` panel; this sheet adds timing, the demo click-script and
 a Q&A crib.
 
-**Total: 8 minutes** — 5 for the slides, 3 for the live demo. Speak to the visuals; the slides carry almost no text on
-purpose.
+**Total: 10 minutes** — 7 for the slides, 3 for the live demo (an 8-minute cut is in the timing checklist at the end).
+Speak to the visuals; the slides carry almost no text on purpose.
 
 ---
 
@@ -48,12 +48,15 @@ name, so a homograph can never pass as official and an official site can never b
 
 ## 6 · Assess (50 s)
 
-Left: the real page from our reference gallery. Right: the candidate opened in a throw-away browser (desktop and phone).
-Four independent signals: layout 93 % match, the emblem is a pixel copy, the text claims to be RTA with urgency cues, and
-the form asks for card number, expiry, CVV **and the SMS one-time code**. Fused risk 90/100 → confirmed fake, reasons in
-plain language. Same stage clears false positives (the gym `rta-ae-fitness.com` passes the name filter and is cleared);
+Left: the reference page from our gallery — **in the demo a replica we built** of the RTA fines page (original artwork,
+served on localhost; in deployment the gallery is built from live screenshots of the real portals). Right: the candidate
+opened in a throw-away browser (desktop and phone). Four independent signals: layout 93 % match (perceptual encoder;
+structural similarity 0.74–0.78), the emblem is found by template matching, the text claims to be RTA with urgency cues,
+and the form asks for card number, expiry, CVV **and the SMS one-time code**. Fused risk 90/100 → confirmed fake, reasons
+in plain language. Same stage clears false positives (the gym `rta-ae-fitness.com` passes the name filter and is cleared);
 parked names go into a re-check loop and are caught when they go live. Encoder is pluggable: DINOv3 when installed, a
-dependency-free perceptual encoder in this demo.
+dependency-free perceptual encoder in this demo. If asked: the similarity numbers come from our own fixture set, not from
+real scam pages yet.
 
 ## 7 · Qualify (40 s)
 
@@ -74,12 +77,14 @@ to the hash-chained audit log. Partner endpoints are simulated in this build; pa
 
 ## 9 · Results (40 s)
 
-Real timestamps from a demo run: certificate logged → candidate after 6 s → verified and evidence sealed 7 s later →
-analyst approved in under 3 min → telecom block acknowledged 1 s after. Time-to-identify is measured from the public
-certificate timestamp, so anyone can recompute it. Against a conservative complaint-driven baseline (9 h) and a
-takedown-only baseline (48 h) the 70 % / 50 % targets are met by construction — today's delay is waiting for complaints
-and then for takedowns, and SAQR removes both waits. Say clearly: baselines are assumptions we will replace with the
-organisers' historical cases.
+Present this as a **time budget**, not a benchmark. Pipeline steps measured in the offline demo: candidate within seconds
+of the certificate appearing → verified and evidence sealed a few seconds later → analyst approved in under 3 min →
+telecom acknowledgement 1 s after (**simulated** — say so). Two honesty points, volunteer them: in the offline replay the
+certificate timestamps are synthetic (the feed stamps each certificate a few seconds before it is shown); with the live
+feed (`saqr demo --live`) the clock starts at the real public log timestamp, so anyone can recompute time-to-identify from
+the log entry in the evidence package. Against a conservative complaint-driven baseline (9 h) and a takedown-only baseline
+(48 h) the 70 % / 50 % targets are met by construction — today's delay is waiting for complaints and then for takedowns,
+and SAQR removes both waits. Say clearly: baselines are assumptions we will replace with the organisers' historical cases.
 
 ## 10 · Constraints (35 s)
 
@@ -91,7 +96,7 @@ model: everyone acts on one shared case.
 
 ## 11 · Live demo (3 min) — click-script
 
-Before the session: `saqr demo` (or `saqr demo --live` with Internet), open `http://localhost:8000/docs/presentation/#/11`
+Before the session: `saqr demo` (or `saqr demo --live` with Internet), open `http://localhost:8000/deck#slide-11`
 or the dashboard tab. Reset via the Presenter drawer if a previous run is visible.
 
 1. **Live Wall.** The ticker is scrolling. Press `P`, fire *"Certificate issued for rta-fines-refund.com"*.
@@ -111,7 +116,8 @@ If anything stalls: the Presenter drawer has *Again* on every step, and `POST /a
 
 Say it before they ask: names with no recognisable word, wildcard certificates and free-hosting subdomains are not in the
 certificate filter — they come in reactively and get the same verification and block. Connectors are simulated. Demo
-encoder is perceptual; DINOv3 plugs in. Baselines are assumptions. No authentication in the MVP. Next 90 days: partner
+encoder is perceptual; DINOv3 plugs in; the verifier has been evaluated on our own fixture pages, not on real scam pages
+yet. Baselines are assumptions. No authentication in the MVP. Next 90 days: partner
 integrations, model trained on historical cases, UAE PASS + national TSA, citizen reporting number, more sensors.
 
 ## 13 · Close (15 s)
@@ -129,8 +135,13 @@ our baselines, and an introduction to TDRA and one operator to wire the first re
 * **Why does a scammer's domain show up at all?** Browsers reject certificates that are not logged, so every CA logs them.
   Wildcard certificates hide the subdomain and meaningless names have nothing to match — we say so on slide 12.
 * **What exactly is "time to identify"?** `detected_at − certificate log timestamp`. Exposure: certificate timestamp →
-  first confirmed block (telecom/browser). Both recomputable from the log entry in the package. Baselines (9 h, 48 h) are
-  configurable assumptions (`docs/metrics.md`).
+  first confirmed block (telecom/browser). With the live feed both are recomputable from the log entry in the package; in
+  the offline replay the certificate timestamps are synthetic, so the demo numbers show the pipeline's time budget, not a
+  field measurement. Baselines (9 h, 48 h) are configurable assumptions (`docs/metrics.md`).
+* **Are the screenshots real government pages?** No — the demo fixtures are replicas we drew ourselves (original artwork),
+  served only on localhost, so nothing is misrepresented and nothing real is touched. In deployment the reference gallery
+  is built from live screenshots of the real portals (`saqr gallery build`), and the verifier would be tuned on real
+  historical scam pages.
 * **Is the "AI model" real?** Four signal families are fused with documented weights and decision rules; the visual
   encoder is DINOv3/DINOv2 when installed and a dependency-free perceptual encoder in the demo (clones 0.92–0.94, unrelated
   < 0.3 on our fixtures). Training a fusion model on historical cases is the roadmap item — the interface is in place.
@@ -147,3 +158,42 @@ our baselines, and an introduction to TDRA and one operator to wire the first re
   scoring, evidence, audit — runs for real (`saqr demo --live` uses the real global logs).
 * **Scale?** Filter ~10,000 names/s per core; global feed is a few hundred certificates/s; verification ~5 s per candidate,
   parallel browsers; one node handles the country-level stream.
+* **Could SAQR block a legitimate site?** Not through the product: official domains and everything under `gov.ae` are
+  allow-listed on the raw name, the allow-list is re-checked in the dispatcher at the moment of sending, and nothing goes
+  out without a verdict and a named approval. A wrong verdict on a non-official site is caught by the human step; every
+  dispatch is reversible through the same partner channels and recorded in the audit chain.
+
+---
+
+## Timing checklist
+
+| Slide | Cumulative |
+|---|---|
+| 1 Title | 0:10 |
+| 2 Problem | 0:50 |
+| 3 Insight | 1:35 |
+| 4 Four stages | 2:05 |
+| 5 Sense | 2:45 |
+| 6 Assess | 3:35 |
+| 7 Qualify | 4:15 |
+| 8 Respond | 5:00 |
+| 9 Results | 5:40 |
+| 10 Constraints | 6:15 |
+| 11 Live demo | 9:15 (3:00) — cut step 6 if behind |
+| 12 Scope · next | 9:45 |
+| 13 Close | 10:00 |
+
+For a strict 8-minute slot: skip slide 4 (the stage slides carry it), say slides 9 and 10 in one breath each, and keep
+the demo to steps 1–5.
+
+## Before you go on stage
+
+1. `saqr demo` running (`make demo`), dashboard open at `http://localhost:8000/`, deck open at `http://localhost:8000/deck`
+   in a second tab or window (`F` for fullscreen, `N` toggles these notes).
+2. Presenter drawer (`p` in the dashboard): **Reset**, then **Stop** so the scenario does not run ahead of you — you fire
+   the steps yourself on slide 11. Leave the speed at 1×.
+3. Check the live-embed on slide 11 shows the dashboard (it needs the deck served by the node, not opened as a file).
+4. No Internet at the venue is fine: the offline replay needs nothing external; evidence timestamps fall back to the
+   local signature and say so on the package.
+5. If anything stalls during the demo: *Again* on the step in the Presenter drawer, or `POST /api/demo/reset` and restart
+   from step 1 — it takes about 15 seconds.

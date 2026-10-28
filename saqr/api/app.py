@@ -58,6 +58,10 @@ class DemoStartBody(BaseModel):
     speed: float | None = None
 
 
+class DemoSpeedBody(BaseModel):
+    speed: float = Field(gt=0, le=50)
+
+
 class InjectBody(BaseModel):
     domain: str = Field(min_length=3, max_length=253)
     issuer: str = "Let's Encrypt (R12)"
@@ -336,6 +340,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.post("/api/demo/stop")
     async def demo_stop(request: Request):
         return await _scenario(request).stop()
+
+    @app.post("/api/demo/speed")
+    def demo_speed(request: Request, body: DemoSpeedBody):
+        return _scenario(request).set_speed(body.speed)
 
     @app.post("/api/demo/reset")
     async def demo_reset(request: Request):

@@ -350,6 +350,21 @@ export class LiveStore {
         d.audit = [ev.data, ...d.audit.filter((a) => a.seq !== ev.data.seq)].slice(0, 200);
         break;
       case 'demo': {
+        if (ev.data.kind === 'reset') {
+          // The node wiped its operational state: drop everything derived from it (registry and status stay).
+          d.certs = [];
+          d.certCount = 0;
+          d.candidates = {};
+          d.verification = {};
+          d.cases = {};
+          d.actions = {};
+          d.evidence = {};
+          d.reports = [];
+          d.campaigns = {};
+          d.touched = {};
+          d.demoFired = [];
+          newCerts.length = 0;
+        }
         d.demoFired = [{ ...ev.data, at: ev.at }, ...d.demoFired].slice(0, 50);
         if (d.demo) {
           d.demo = {

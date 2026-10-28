@@ -113,7 +113,7 @@ export function PresenterDrawer({ open, onClose }: { open: boolean; onClose: () 
               {SPEEDS.map((s) => (
                 <button
                   key={s}
-                  onClick={() => run(`speed${s}`, () => api.demoStart(s))}
+                  onClick={() => run(`speed${s}`, () => api.demoSpeed(s))}
                   className={`h-6 px-2 rounded-[5px] text-[11.5px] tnum ${demo?.speed === s ? 'bg-raised text-ink border border-line-strong' : 'text-ink-3 hover:text-ink border border-transparent'}`}
                 >
                   {s}×

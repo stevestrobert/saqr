@@ -116,6 +116,7 @@ export const api = {
   demo: () => get<DemoState>('/demo'),
   demoStart: (speed?: number) => post<DemoState>('/demo/start', speed ? { speed } : {}),
   demoStop: () => post<DemoState>('/demo/stop'),
+  demoSpeed: (speed: number) => post<DemoState>('/demo/speed', { speed }),
   demoReset: () => post<DemoState>('/demo/reset'),
   demoInject: (domain: string, issuer?: string) => post<{ injected: boolean }>('/demo/inject', { domain, issuer }),
   demoStep: (step_id: string) => post<DemoState>('/demo/step', { step_id }),
