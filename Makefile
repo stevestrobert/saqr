@@ -1,4 +1,4 @@
-.PHONY: setup demo demo-live serve test lint frontend docker watch clean
+.PHONY: setup demo demo-live serve test lint frontend deck docker watch clean
 
 PY ?= python3
 VENV ?= .venv
@@ -30,6 +30,9 @@ lint:
 
 frontend:         ## rebuild the dashboard bundle (needs Node 22)
 	cd frontend && npm install && npm run build
+
+deck:             ## render the pitch deck (docs/presentation/index.html) to docs/SAQR-pitch.pdf
+	$(BIN)/python docs/presentation/build.py
 
 docker:           ## build and run with Docker Compose
 	docker compose up --build

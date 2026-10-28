@@ -114,7 +114,18 @@ tests/           85+ tests: matcher, CT leaf parsing (real log entries), forms/t
 ```
 
 Further reading: [`docs/architecture.md`](docs/architecture.md) · [`docs/api.md`](docs/api.md) ·
-[`docs/challenge-mapping.md`](docs/challenge-mapping.md).
+[`docs/challenge-mapping.md`](docs/challenge-mapping.md) · pitch deck: [`docs/SAQR-pitch.pdf`](docs/SAQR-pitch.pdf)
+(source in `docs/presentation/`, rebuild with `make deck`).
+
+## More screenshots
+
+| Approve & block | Reports & campaigns | Presenter drawer |
+|---|---|---|
+| ![approve](docs/images/approve-modal.png) | ![reports](docs/images/reports.png) | ![presenter](docs/images/presenter-drawer.png) |
+
+| Cases | Audit chain | Protected registry |
+|---|---|---|
+| ![cases](docs/images/cases.png) | ![audit](docs/images/audit.png) | ![registry](docs/images/registry.png) |
 
 ## Team
 

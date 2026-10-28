@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SAQR — hackathon.ae 2026 pitch</title>
+<style>
+  @font-face { font-family: "Inter"; src: url("fonts/inter-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; font-display: block; }
+  @font-face { font-family: "JetBrains Mono"; src: url("fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2"); font-weight: 100 800; font-display: block; }
+  :root {
+    --bg: #0b1220; --bg2: #0f1829; --card: #121c2e; --line: rgba(255,255,255,.09); --ink: #e8eef8; --ink2: #b6c2d6; --ink3: #8593ab;
+    --gold: #f2b544; --emerald: #34d399; --red: #f87171; --amber: #fbbf24; --blue: #60a5fa;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #000; }
+  body { font-family: "Inter", "DejaVu Sans", system-ui, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+  .ar { font-family: "DejaVu Sans", "Noto Sans Arabic", sans-serif; direction: rtl; }
+  .mono { font-family: "JetBrains Mono", "DejaVu Sans Mono", monospace; }
+  section.slide {
+    position: relative; width: 1920px; height: 1080px; overflow: hidden; padding: 84px 110px 90px;
+    background: radial-gradient(1200px 700px at 85% -10%, rgba(242,181,68,.10), transparent 60%),
+                radial-gradient(900px 600px at -10% 110%, rgba(96,165,250,.08), transparent 60%), var(--bg);
+    page-break-after: always; break-after: page; display: flex; flex-direction: column;
+  }
+  section.slide:last-child { page-break-after: auto; break-after: auto; }
+  .kicker { font-size: 20px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 18px; }
+  h1 { font-size: 58px; line-height: 1.1; font-weight: 650; margin: 0 0 14px; letter-spacing: -.01em; }
+  h1 .ar { font-size: 36px; color: var(--ink3); font-weight: 500; margin-left: 24px; }
+  .lead { font-size: 27px; line-height: 1.45; color: var(--ink2); max-width: 1500px; margin: 0 0 36px; }
+  .body { font-size: 24px; line-height: 1.5; color: var(--ink2); }
+  .footer { position: absolute; left: 110px; right: 110px; bottom: 40px; display: flex; justify-content: space-between; align-items: center; font-size: 17px; color: var(--ink3); letter-spacing: .04em; }
+  .footer .brand { display: flex; align-items: center; gap: 10px; }
+  .footer .brand svg { width: 24px; height: 24px; }
+  .grow { flex: 1; min-height: 0; }
+  .cols { display: grid; gap: 32px; }
+  .cols-2 { grid-template-columns: 1fr 1fr; } .cols-3 { grid-template-columns: 1fr 1fr 1fr; } .cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 30px 34px; }
+  .card h3 { margin: 0 0 12px; font-size: 26px; font-weight: 650; }
+  .card h3 .n { display: inline-flex; width: 38px; height: 38px; align-items: center; justify-content: center; border-radius: 10px; background: rgba(242,181,68,.16); color: var(--gold); font-size: 19px; margin-right: 14px; font-weight: 700; vertical-align: middle; }
+  .card p, .card li { font-size: 22px; line-height: 1.45; color: var(--ink2); }
+  .card ul { margin: 10px 0 0; padding-left: 24px; } .card li { margin-bottom: 8px; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 28px 32px; }
+  .stat .v { font-size: 64px; font-weight: 700; letter-spacing: -.02em; line-height: 1; }
+  .stat .l { font-size: 21px; color: var(--ink2); margin-top: 12px; line-height: 1.35; }
+  .stat .s { font-size: 17px; color: var(--ink3); margin-top: 10px; }
+  .gold { color: var(--gold); } .emerald { color: var(--emerald); } .red { color: var(--red); } .amber { color: var(--amber); } .blue { color: var(--blue); } .muted { color: var(--ink3); }
+  .pill { display: inline-block; padding: 7px 16px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,.04); font-size: 19px; color: var(--ink2); margin: 0 10px 10px 0; }
+  .pill.red { color: var(--red); border-color: rgba(248,113,113,.4); background: rgba(248,113,113,.08); }
+  .pill.emerald { color: var(--emerald); border-color: rgba(52,211,153,.4); background: rgba(52,211,153,.08); }
+  .pill.gold { color: var(--gold); border-color: rgba(242,181,68,.45); background: rgba(242,181,68,.08); }
+  .shot { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: #000; box-shadow: 0 30px 60px rgba(0,0,0,.45); }
+  .shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .cap { font-size: 18px; color: var(--ink3); margin-top: 12px; }
+  .flow { display: flex; align-items: stretch; gap: 0; margin-top: 10px; }
+  .flow .node { flex: 1; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px 24px; position: relative; }
+  .flow .node .t { font-size: 22px; font-weight: 650; margin-bottom: 8px; }
+  .flow .node .d { font-size: 19px; color: var(--ink2); line-height: 1.4; }
+  .flow .arrow { width: 46px; display: flex; align-items: center; justify-content: center; color: var(--ink3); font-size: 30px; }
+  .flow .node.hot { border-color: rgba(242,181,68,.6); box-shadow: 0 0 0 4px rgba(242,181,68,.12); }
+  .flow .node.bad { border-color: rgba(248,113,113,.5); }
+  .bar { height: 14px; border-radius: 7px; background: rgba(255,255,255,.07); overflow: hidden; margin-top: 10px; }
+  .bar i { display: block; height: 100%; border-radius: 7px; background: var(--red); }
+  .sig { display: grid; grid-template-columns: 220px 1fr 90px; gap: 18px; align-items: center; font-size: 21px; margin-bottom: 14px; }
+  .sig .k { color: var(--ink2); } .sig .v { text-align: right; font-weight: 650; }
+  .score { font-size: 112px; font-weight: 750; line-height: 1; letter-spacing: -.03em; }
+  .quote { font-size: 30px; line-height: 1.5; color: var(--ink); border-left: 6px solid var(--gold); padding: 10px 0 10px 34px; margin: 0; max-width: 1560px; font-weight: 450; }
+  .quote b { color: var(--gold); font-weight: 700; }
+  table.t { border-collapse: collapse; width: 100%; font-size: 21px; }
+  table.t th { text-align: left; color: var(--ink3); font-weight: 600; font-size: 17px; letter-spacing: .08em; text-transform: uppercase; padding: 0 14px 12px; border-bottom: 1px solid var(--line); }
+  table.t td { padding: 13px 14px; border-bottom: 1px solid var(--line); color: var(--ink2); vertical-align: top; }
+  table.t td:first-child { color: var(--ink); }
+  .timeline { display: flex; align-items: flex-start; margin-top: 30px; }
+  .timeline .tn { flex: 1; text-align: center; position: relative; }
+  .timeline .dot { width: 22px; height: 22px; border-radius: 50%; background: var(--blue); margin: 0 auto 14px; box-shadow: 0 0 0 6px rgba(96,165,250,.15); }
+  .timeline .dot.gold { background: var(--gold); box-shadow: 0 0 0 6px rgba(242,181,68,.18); }
+  .timeline .dot.emerald { background: var(--emerald); box-shadow: 0 0 0 6px rgba(52,211,153,.18); }
+  .timeline .dot.grey { background: #64748b; box-shadow: 0 0 0 6px rgba(100,116,139,.18); }
+  .timeline .tn:not(:last-child)::after { content: ""; position: absolute; top: 10px; left: calc(50% + 18px); right: calc(-50% + 18px); height: 2px; background: var(--line); }
+  .timeline .tl { font-size: 21px; font-weight: 650; } .timeline .ts { font-size: 18px; color: var(--ink3); margin-top: 4px; }
+  .timeline .gap { font-size: 17px; color: var(--gold); margin-top: 8px; font-weight: 600; }
+  .ticker { font-family: "JetBrains Mono", monospace; font-size: 19px; color: var(--ink3); line-height: 1.9; }
+  .ticker b { color: var(--amber); font-weight: 600; } .ticker em { color: var(--emerald); font-style: normal; } .ticker s { color: var(--red); text-decoration: none; font-weight: 700; }
+  .big-title { font-size: 150px; font-weight: 800; letter-spacing: -.02em; line-height: .95; }
+  .big-title .ar { font-size: 120px; font-weight: 700; color: var(--gold); margin-left: 40px; }
+  .hero-sub { font-size: 44px; font-weight: 500; color: var(--ink); margin-top: 36px; max-width: 1500px; line-height: 1.25; }
+  .hero-tag { font-size: 26px; color: var(--ink3); margin-top: 28px; }
+  .chip-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .num { font-variant-numeric: tabular-nums; }
+  .cmp { display: grid; grid-template-columns: 1fr 160px 1fr; gap: 24px; align-items: center; }
+  .cmp .shot { aspect-ratio: 1280 / 1000; height: auto; }
+  .cmp .shot img { object-fit: contain; }
+  .cmp .mid { text-align: center; }
+  .cmp .ring { width: 150px; height: 150px; border-radius: 50%; border: 6px solid rgba(248,113,113,.7); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 12px; background: rgba(248,113,113,.08); }
+  .cmp .ring b { font-size: 44px; } .cmp .ring span { font-size: 15px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); }
+  .label { font-size: 19px; font-weight: 650; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+  .label i { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+</style>
+</head>
+<body>
+
+<!-- 1 · Title ------------------------------------------------------------------------------------------ -->
+<section class="slide" style="justify-content:center">
+  <div style="display:flex;align-items:center;gap:34px;margin-bottom:10px">
+    <svg viewBox="0 0 32 32" width="96" height="96"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>
+    <div class="kicker" style="margin:0">hackathon.ae 2026 · Pioneers track · Digital Trust &amp; Cyber-Secure Nation</div>
+  </div>
+  <div class="big-title">SAQR <span class="ar">صقر</span></div>
+  <div class="hero-sub">Early warning and one-click takedown for fake government payment pages — caught while they are being set up, blocked everywhere before the first victim pays.</div>
+  <div class="hero-tag">Sense · Assess · Qualify · Respond &nbsp;—&nbsp; the falcon sees the prey long before it strikes.</div>
+  <div class="footer"><span>NYU Abu Dhabi student team</span><span>Challenge 6 · impersonation of government financial services</span></div>
+</section>
+
+<!-- 2 · Problem ---------------------------------------------------------------------------------------- -->
+<section class="slide">
+  <div class="kicker">The problem</div>
+  <h1>Fake fine, fee and refund pages are found after the money is gone</h1>
+  <p class="lead">Scammers clone a government payment page, send the link by SMS or WhatsApp, and collect card numbers, CVVs and one-time codes. Today the page is discovered when victims complain — and taking it down means writing to the registrar, the host and the telecom operators one by one.</p>
+  <div class="cols cols-3" style="margin-bottom:34px">
+    <div class="stat"><div class="v red">&gt; 75%</div><div class="l">of cyber breaches start with phishing or fraudulent messages</div><div class="s">UAE Cyber Security Council</div></div>
+    <div class="stat"><div class="v amber">+35%</div><div class="l">rise in scam messages in one year</div><div class="s">UAE Cyber Security Council</div></div>
+    <div class="stat"><div class="v gold">days</div><div class="l">a fake stays online while takedowns run one partner at a time</div><div class="s">registrar → host → telecoms, sequentially</div></div>
+  </div>
+  <div class="flow">
+    <div class="node"><div class="t">Name registered</div><div class="d">rta-fines-refund.com, any registrar, any TLD</div></div><div class="arrow">→</div>
+    <div class="node"><div class="t">Certificate issued</div><div class="d">free, automatic, in minutes</div></div><div class="arrow">→</div>
+    <div class="node"><div class="t">SMS wave</div><div class="d">“claim your AED 320 refund within 24 h”</div></div><div class="arrow">→</div>
+    <div class="node bad"><div class="t">Victims pay</div><div class="d">card + CVV + OTP relayed live</div></div><div class="arrow">→</div>
+    <div class="node bad"><div class="t">Complaints</div><div class="d">hours to days later — <b>identified here</b></div></div><div class="arrow">→</div>
+    <div class="node bad"><div class="t">Manual takedown</div><div class="d">evidence collected by hand, partners contacted in series</div></div>
+  </div>
+  <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>2</span></div>
+</section>
+
+<!-- 3 · Challenge -------------------------------------------------------------------------------------- -->
+<section class="slide">
+  <div class="kicker">The challenge we answer</div>
+  <h1>Digital Trust &amp; Cyber-Secure Nation · challenge 6</h1>
+  <p class="quote">“How might we enable government entities and cybersecurity teams to <b>proactively detect, verify, and respond</b> to websites, messages, domains and digital channels impersonating official government financial services to achieve a <b>70% reduction in the time to identify</b> fraudulent channels and a <b>50% reduction in the exposure period</b> of confirmed impersonation attempts, under digital identity, privacy, evidentiary, and legal constraints …”</p>
+  <div style="margin-top:44px" class="cols cols-4">
+    <div class="card"><h3>Detect</h3><p>continuously identify suspicious domains, sites and messages — before victims report them</p></div>
+    <div class="card"><h3>Verify</h3><p>decide automatically whether a channel is authentic, with evidence an analyst can read</p></div>
+    <div class="card"><h3>Consolidate</h3><p>threat reports and evidence in one place, with integrity a court can rely on</p></div>
+    <div class="card"><h3>Respond</h3><p>coordinate takedown and blocking across organisations and external providers</p></div>
+  </div>
+  <div style="margin-top:36px" class="chip-row"><span class="pill gold">digital identity</span><span class="pill gold">privacy</span><span class="pill gold">evidentiary</span><span class="pill gold">legal</span><span class="pill">UAE National Cybersecurity Strategy 2025-2031</span></div>
+  <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>3</span></div>
+</section>
+
+<!-- 4 · Insight ---------------------------------------------------------------------------------------- -->
+<section class="slide">
+  <div class="kicker">The insight</div>
+  <h1>Scammers publish their own early warning</h1>
+  <p class="lead">A convincing fake needs HTTPS — browsers brand plain pages “Not secure”. Every publicly trusted certificate must be written to public <b style="color:var(--ink)">Certificate Transparency</b> logs before Chrome and Safari accept it. So the moment a scammer gets a certificate for <span class="mono">uae-fines-refund.com</span>, the name is in a public stream anyone can read — usually before the first SMS is sent.</p>
+  <div class="flow" style="margin-bottom:34px">
+    <div class="node"><div class="t">Scammer</div><div class="d">registers a look-alike name — any registrar, any TLD</div></div><div class="arrow">→</div>
+    <div class="node"><div class="t">Certificate authority</div><div class="d">issues a free certificate (Let’s Encrypt, ZeroSSL …)</div></div><div class="arrow">→</div>
+    <div class="node hot"><div class="t">Public CT logs</div><div class="d">Google, Cloudflare, Let’s Encrypt, DigiCert — append-only, world-readable</div></div><div class="arrow">→</div>
+    <div class="node hot"><div class="t">SAQR</div><div class="d">reads the same global stream, flags look-alikes, verifies the page</div></div>
+  </div>
+  <div class="cols cols-3">
+    <div class="stat"><div class="v blue num">~150 /s</div><div class="l">certificates streamed from two Google logs in our tests — the whole global feed is a few hundred per second</div></div>
+    <div class="stat"><div class="v gold num">1 in 3,000</div><div class="l">names survive the cheap look-alike filter; only those get the expensive browser check</div></div>
+    <div class="stat"><div class="v emerald">0 citizens</div><div class="l">no traffic taps, no browsing data, no phone access — only what the attacker publishes</div></div>
+  </div>
+  <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>4</span></div>
+</section>
+
+<!-- 5 · Four stages ------------------------------------------------------------------------------------ -->
+<section class="slide">
+  <div class="kicker">How it works</div>
+  <h1>Four stages, one pipeline, one click</h1>
+  <div class="cols cols-4" style="margin-top:20px;align-items:start">
+    <div class="card"><h3><span class="n">1</span>Sense</h3><ul>
+      <li>Tails Certificate Transparency logs directly (RFC 6962) and certstream</li>
+      <li>Explainable look-alike filter: allow-list, homograph skeleton, brand tokens, typo permutations, lure vocabulary (EN/AR)</li>
+      <li>Forwarded SMS/WhatsApp, bank and telecom reports and threat feeds enter the same queue</li></ul></div>
+    <div class="card"><h3><span class="n">2</span>Assess</h3><ul>
+      <li>Opens each candidate in a throw-away browser, desktop and mobile</li>
+      <li>Visual similarity to a gallery of official pages, emblem reuse, page-text claims, what the form asks for (card, CVV, OTP, Emirates ID)</li>
+      <li>Fused verdict with a risk score and reasons; parked names are re-checked automatically</li></ul></div>
+    <div class="card"><h3><span class="n">3</span>Qualify</h3><ul>
+      <li>Evidence package built automatically: screenshots, DOM, HAR, DNS, RDAP, certificate + log entry, hosting, IOCs</li>
+      <li>SHA-256 per artefact, Merkle root, trusted timestamp, chain of custody, readable report</li>
+      <li>Re-verifiable offline by anyone</li></ul></div>
+    <div class="card"><h3><span class="n">4</span>Respond</h3><ul>
+      <li>A named analyst approves with one click</li>
+      <li>Requests fan out at once to registrar, host, telecom operators, browser blocklists, banks, the CA and aeCERT</li>
+      <li>Allow-list re-checked server-side; every step in a hash-chained audit log; campaigns, not single texts</li></ul></div>
+  </div>
+  <div class="flow" style="margin-top:40px">
+    <div class="node"><div class="t">~150 certificates / s</div><div class="d">read straight from the public logs</div></div><div class="arrow">→</div>
+    <div class="node"><div class="t">1 in 3,000 names</div><div class="d">passes the explainable filter</div></div><div class="arrow">→</div>
+    <div class="node"><div class="t">~5 s per candidate</div><div class="d">isolated capture + analysis</div></div><div class="arrow">→</div>
+    <div class="node"><div class="t">~1 s</div><div class="d">evidence hashed, time-stamped, zipped</div></div><div class="arrow">→</div>
+    <div class="node hot"><div class="t">1 click</div><div class="d">7 channels, receipts tracked live</div></div>
+  </div>
+  <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>5</span></div>
+</section>
+
+<!-- 6 · Sense ------------------------------------------------------------------------------------------ -->
+<section class="slide">
+  <div class="kicker">Stage 1 · Sense</div>
+  <h1>Millions of names a day → a handful of candidates, each with a reason</h1>
+  <div class="cols cols-2 grow" style="grid-template-columns: 1.05fr .95fr; margin-top:10px">
+    <div>
+      <div class="card" style="margin-bottom:22px"><h3>Chokepoints the scammer cannot avoid</h3>
+        <ul><li><b>Certificate logs</b> — read directly with <span class="mono">get-sth / get-entries</span>; each leaf parsed for every domain name. ~10,000 names/second per core.</li>
+            <li><b>Reactive inputs</b> — citizens forward messages to a number; banks, telecoms and feeds submit links. Names that never hit the logs (free hosting, wildcard certificates) still get the same verification.</li></ul></div>
+      <div class="card"><h3>Safeguard built in: the allow-list</h3><p>Official domains, their subdomains and the <span class="mono">gov.ae</span>, <span class="mono">mil.ae</span>, <span class="mono">ac.ae</span> suffixes can never become candidates — checked on the raw name, so a homograph never passes.</p></div>
+    </div>
+    <div class="card">
+      <h3>The filter explains every point</h3>
+      <div class="ticker" style="margin-top:6px">
+        <div><s>100</s> &nbsp;xn--tx-refund-gov-w1k.com → <b>tаx-refund-gov.com</b> &nbsp;<span class="muted">Cyrillic а</span></div>
+        <div class="muted" style="padding-left:62px">IDN homograph +50 · brand ‘tax’ +25 · lure ‘refund’ +20 · gov cue +10 · combination +20</div>
+        <div><s>&nbsp;80</s> &nbsp;<b>rta-fines-refund.com</b></div>
+        <div class="muted" style="padding-left:62px">brand ‘rta’ +25 · lure ‘fines’ +20 · lure ‘refund’ +20 · combination +20</div>
+        <div><s>&nbsp;90</s> &nbsp;<b>emiratespost-redelivery.shop</b></div>
+        <div class="muted" style="padding-left:62px">brand ‘emiratespost’ +45 · lure ‘redelivery’ +20 · combination +20 · abuse-prone TLD +5</div>
+        <div><em>&nbsp;&nbsp;0</em> &nbsp;<em>www.rta.ae</em> &nbsp;<span class="muted">official — allow-listed</span></div>
+        <div><span class="muted">&nbsp;20 &nbsp;finesse-payroll.com &nbsp;— discarded (no brand, one keyword)</span></div>
+        <div><span class="muted">&nbsp;&nbsp;0 &nbsp;smarta.ae.pages.dev &nbsp;— discarded (boundary-safe matching)</span></div>
+      </div>
+      <p style="margin-top:22px">Candidate at <b>40+</b>. Techniques: Unicode confusable skeleton, public-suffix split, vocabulary segmentation (<span class="mono">rtafinesrefund</span> → rta · fines · refund), dnstwist-style permutations, Damerau-Levenshtein near-misses.</p>
+    </div>
+  </div>
+  <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>6</span></div>
+</section>
+
+<!-- 7 · Assess ----------------------------------------------------------------------------------------- -->
+<section class="slide">
+  <div class="kicker">Stage 2 · Assess</div>
+  <h1>Does it look like the real page — and does it ask for a card?</h1>
+  <div class="cols" style="grid-template-columns: 1.25fr .75fr; margin-top:6px" >
+    <div>
+      <div class="cmp">
+        <div><div class="label"><i style="background:var(--emerald)"></i>Official page · <span class="mono muted">rta.ae</span></div><div class="shot"><img src="img/official-rta.png" alt="official"></div></div>
+        <div class="mid"><div class="ring"><b class="red">93%</b><span>visual</span></div><div class="muted" style="font-size:17px">SSIM 0.74 · emblem 100%</div></div>
+        <div><div class="label"><i style="background:var(--red)"></i>Suspect page · <span class="mono muted">rta-fines-refund.com</span></div><div class="shot"><img src="img/clone-rta.png" alt="clone"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:baseline;gap:18px;margin-bottom:10px"><div class="score red num">90</div><div><div style="font-size:22px;font-weight:650">confirmed fake</div><div class="muted" style="font-size:18px">confidence 98% · risk /100</div></div></div>
+      <div class="sig"><span class="k">Visual layout</span><div class="bar"><i style="width:78%"></i></div><span class="v">0.78</span></div>
+      <div class="sig"><span class="k">Emblem reuse</span><div class="bar"><i style="width:100%"></i></div><span class="v">1.00</span></div>
+      <div class="sig"><span class="k">Page text</span><div class="bar"><i style="width:95%"></i></div><span class="v">0.95</span></div>
+      <div class="sig"><span class="k">Form fields</span><div class="bar"><i style="width:100%"></i></div><span class="v">1.00</span></div>
+      <div class="sig"><span class="k">Domain name</span><div class="bar"><i style="width:80%"></i></div><span class="v">0.80</span></div>
+      <ul style="margin:14px 0 0;padding-left:22px">
+        <li>asks for card number, CVV, Emirates ID <b>and the SMS one-time code</b> — official portals hand off to a licensed gateway</li>
+        <li>claims to be RTA, with urgency cues (“within 24 hours”, “will be forfeited”)</li>
+        <li>certificate issued minutes ago by a free CA</li>
+      </ul>
+    </div>
+  </div>
+  <p class="body" style="margin-top:18px">Isolated Chromium capture (desktop + mobile, redirects, TLS, HAR). Encoders share one interface: DINOv3 / DINOv2 when installed, a dependency-free perceptual encoder otherwise. The gym site <span class="mono">rta-ae-fitness.com</span> passes the name filter and is <b style="color:var(--emerald)">cleared</b> here; parked names go to a re-check loop and are caught when activated.</p>
+  <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>7</span></div>
+</section>
+
+<!-- 8 · Qualify ---------------------------------------------------------------------------------------- -->
+<section class="slide">
+  <div class="kicker">Stage 3 · Qualify</div>
+  <h1>Court-ready evidence, sealed automatically in seconds</h1>
+  <div class="cols" style="grid-template-columns: .9fr 1.1fr; margin-top:6px" >
+    <div>
+      <div class="card" style="margin-bottom:22px"><h3>What goes in the package</h3>
+        <ul><li>Full-page screenshots (desktop + mobile), rendered DOM, visible text, HAR of the whole visit</li>
+            <li>DNS records, registration data (RDAP), live TLS certificate, the Certificate Transparency log entry (log + index — anyone can re-fetch it), hosting/ASN and abuse contacts</li>
+            <li>Indicators shown on the page: IBANs, wallets, phone numbers, e-mails</li>
+            <li>Verdict and explanations</li></ul></div>
+      <div class="card"><h3>How integrity is proven</h3>
+        <ul><li>SHA-256 for every artefact → Merkle root → signed manifest</li>
+            <li>RFC 3161 time-stamp token from a public TSA, or a clearly labelled local Ed25519 signature when offline</li>
+            <li>Chain-of-custody log, human-readable report, one zip</li>
+            <li><span class="mono">saqr evidence verify</span> recomputes everything — no trust in SAQR required</li></ul></div>
+    </div>
+    <div><div class="shot" style="height:780px"><img src="../images/evidence-report.png" alt="evidence report"></div><div class="cap">report.html as generated for rta-fines-refund.com in the demo</div></div>
+  </div>
+  <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>8</span></div>
+</section>
+
+<!-- 9 · Respond ---------------------------------------------------------------------------------------- -->
+<section class="slide">
+  <div class="kicker">Stage 4 · Respond</div>
+  <h1>One click, every partner at once — with a human in the loop</h1>
+  <div class="cols" style="grid-template-columns: 1.15fr .85fr; margin-top:6px">
+    <div><div class="shot" style="height:720px"><img src="../images/approve-modal.png" alt="approval"></div><div class="cap">the approval modal: safeguards shown, analyst named, channels chosen — then <b>Approve &amp; dispatch 7 channels</b></div></div>
+    <div>
+      <table class="t">
+        <tr><th>Channel</th><th>What is sent</th><th>Effect</th></tr>
+        <tr><td>Telecom operators via TDRA</td><td>URL/domain block, SMS-filter pattern, RPZ record</td><td class="emerald">cuts exposure in seconds</td></tr>
+        <tr><td>Browser blocklists</td><td>Safe Browsing, SmartScreen reports</td><td class="emerald">red warning in every browser</td></tr>
+        <tr><td>Registrar</td><td>suspension notice (RDAP abuse contact, RAA 3.18)</td><td>takedown at source</td></tr>
+        <tr><td>Hosting provider</td><td>content takedown (ASN abuse contact)</td><td>takedown at source</td></tr>
+        <tr><td>Banks / CBUAE</td><td>IBANs, wallets, numbers from the page</td><td>freeze the money trail</td></tr>
+        <tr><td>Certificate authority</td><td>revocation request (BR 4.9.1.1)</td><td>padlock removed</td></tr>
+        <tr><td>aeCERT + imitated entity</td><td>incident + IOCs</td><td>shared situational awareness</td></tr>
+      </table>
+      <div style="margin-top:22px" class="chip-row"><span class="pill emerald">allow-list re-checked server-side</span><span class="pill emerald">named human approval</span><span class="pill emerald">hash-chained audit log</span><span class="pill">receipts &amp; acknowledgements per channel</span></div>
+    </div>
+  </div>
+  <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>9</span></div>
+</section>
+
+<!-- 10 · Results --------------------------------------------------------------------------------------- -->
+<section class="slide">
+  <div class="kicker">Measured in the demo</div>
+  <h1>From certificate to block in under three minutes — including the human</h1>
+  <div class="timeline" style="margin-bottom:40px">
+    <div class="tn"><div class="dot grey"></div><div class="tl">Certificate logged</div><div class="ts mono">06:48:58</div></div>
+    <div class="tn"><div class="dot"></div><div class="tl">Detected</div><div class="ts mono">06:49:04</div><div class="gap">+6 s</div></div>
+    <div class="tn"><div class="dot"></div><div class="tl">Verified · risk 90</div><div class="ts mono">06:49:11</div><div class="gap">+7 s</div></div>
+    <div class="tn"><div class="dot"></div><div class="tl">Evidence sealed</div><div class="ts mono">06:49:11</div><div class="gap">+0 s</div></div>
+    <div class="tn"><div class="dot gold"></div><div class="tl">Analyst approved</div><div class="ts mono">06:51:57</div><div class="gap">+2 min 46 s</div></div>
+    <div class="tn"><div class="dot emerald"></div><div class="tl">Blocked by telecoms</div><div class="ts mono">06:51:58</div><div class="gap">+1 s</div></div>
+  </div>
+  <div class="cols cols-3">
+    <div class="stat"><div class="v emerald num">6 s</div><div class="l">time to identify, from the public certificate timestamp</div><div class="s">challenge target: −70% vs today · assumed baseline 9 h (complaint-driven)</div></div>
+    <div class="stat"><div class="v emerald num">3 min</div><div class="l">exposure, from certificate to the first confirmed block</div><div class="s">challenge target: −50% vs today · assumed baseline 48 h (takedown-only)</div></div>
+    <div class="stat"><div class="v gold num">1 click</div><div class="l">11 partner requests, acknowledged in parallel; registrar and host takedown continue in the background</div><div class="s">simulated partner endpoints in this build</div></div>
+  </div>
+  <p class="body" style="margin-top:34px">Both metrics are anchored on the Certificate Transparency timestamp — the earliest public trace of the fake — so anyone can recompute them from the log entry stored in the evidence package. Baselines are documented assumptions, to be replaced by the organisers’ historical cases. The gain is structural: today’s delay is waiting — for complaints, then for takedowns — and SAQR removes both waits.</p>
+  <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>10</span></div>
+</section>
+
+<!-- 11 · Constraints ----------------------------------------------------------------------------------- -->
+<section class="slide">
+  <div class="kicker">Built for the constraints</div>
+  <h1>Identity, privacy, evidence and law are design inputs, not afterthoughts</h1>
+  <div class="cols cols-4" style="margin-top:20px;align-items:start">
+    <div class="card"><h3>Digital identity</h3><ul><li>No citizen identity is processed — SAQR looks at infrastructure the attacker publishes</li><li>Every approval is attributed to a named analyst and written to the audit chain</li><li>Production: analysts sign in with UAE PASS</li></ul></div>
+    <div class="card"><h3>Privacy</h3><ul><li>No traffic taps, no browsing data, no device access</li><li>Reporter numbers are masked and hashed; Emirates ID and phone numbers inside forwarded texts are scrubbed before storage</li><li>Personal Data Protection Law (Decree-Law 45/2021) by design</li></ul></div>
+    <div class="card"><h3>Evidentiary</h3><ul><li>SHA-256 per artefact, Merkle root, RFC 3161 time-stamp, chain of custody</li><li>Append-only hash-chained audit log; packages re-verifiable offline</li><li>Aligned with the Electronic Transactions and Trust Services law (Decree-Law 46/2021)</li></ul></div>
+    <div class="card"><h3>Legal</h3><ul><li>Human sign-off before any block; allow-list enforced in the dispatcher, not the UI</li><li>Notices cite ICANN RAA 3.18, CA/B Forum BR 4.9.1.1 and the Cybercrimes law (Decree-Law 34/2021)</li><li>Registrar/host takedown and network blocking run in parallel, each on its own legal basis</li></ul></div>
+  </div>
+  <p class="quote" style="margin-top:44px;font-size:27px">The same model as the Kazakhstan National Bank’s Antifraud Center — banks, prosecutors, police and mobile operators acting on one shared case in real time — applied to fake websites and messages instead of fraudulent transfers.</p>
+  <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>11</span></div>
+</section>
+
+<!-- 12 · What we built --------------------------------------------------------------------------------- -->
+<section class="slide">
+  <div class="kicker">What we built</div>
+  <h1>A working node, not a mock-up</h1>
+  <div class="cols" style="grid-template-columns: .8fr 1.2fr; margin-top:6px">
+    <div>
+      <div class="cols cols-2" style="gap:18px">
+        <div class="stat"><div class="v num" style="font-size:52px">6,000</div><div class="l">lines of Python: sensing, verification, evidence, response, API</div></div>
+        <div class="stat"><div class="v num" style="font-size:52px">6,000</div><div class="l">lines of TypeScript: the analyst dashboard</div></div>
+        <div class="stat"><div class="v num" style="font-size:52px">91</div><div class="l">automated tests, incl. real log entries and the full dispatch flow</div></div>
+        <div class="stat"><div class="v num" style="font-size:52px">36</div><div class="l">API routes + live WebSocket events</div></div>
+        <div class="stat"><div class="v num" style="font-size:52px">34 / 44</div><div class="l">protected entities / official domains in the registry</div></div>
+        <div class="stat"><div class="v num" style="font-size:52px">7</div><div class="l">partner connectors with realistic payloads</div></div>
+      </div>
+      <p class="body" style="margin-top:22px;font-size:21px">Python · FastAPI · Playwright/Chromium · React/Vite/Tailwind · SQLite · Docker. Runs fully offline for demos (<span class="mono">saqr demo</span>) or on the real global certificate feed (<span class="mono">saqr demo --live</span>).</p>
+    </div>
+    <div><div class="shot" style="aspect-ratio:16/10"><img src="../images/live-wall.png" alt="live wall" style="object-fit:contain"></div><div class="cap">Live Wall: certificate ticker, detections moving through the stages, funnel and target gauges</div></div>
+  </div>
+  <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>12</span></div>
+</section>
+
+<!-- 13 · Scope & roadmap ------------------------------------------------------------------------------- -->
+<section class="slide">
+  <div class="kicker">Honest scope · next steps</div>
+  <h1>What the MVP does not do yet — and the 90-day path</h1>
+  <div class="cols cols-2" style="margin-top:14px;align-items:start">
+    <div class="card"><h3>Not covered by the certificate filter</h3>
+      <ul><li>Names without a recognisable word (<span class="mono">xk7q2.shop</span>), wildcard certificates, free-hosting subdomains, hacked legitimate sites → found reactively through reports and feeds, then the same verification and block</li>
+          <li>Partner connectors are simulated: realistic payloads and acknowledgements, no live SMTP/API credentials</li>
+          <li>The demo runs the dependency-free perceptual encoder; DINOv3 plugs into the same interface</li>
+          <li>Baselines for the 70% / 50% comparison are assumptions until historical case data replaces them</li>
+          <li>No authentication in the MVP — sits behind the entity’s SSO in deployment</li></ul></div>
+    <div class="card"><h3>Roadmap</h3>
+      <ul><li><b>Partners:</b> TDRA block list and SMS filtering with e&amp; and du, UAE Banks Federation fraud desk, aeCERT, CA abuse APIs — the Antifraud-Center model: everyone acts on the same case at once</li>
+          <li><b>Model:</b> DINOv3 fine-tuned on historical impersonation cases; learned fusion replacing the hand-set weights</li>
+          <li><b>Trust:</b> UAE PASS sign-in for analysts, national time-stamping authority, STIX/TAXII sharing</li>
+          <li><b>Citizens:</b> a short reporting number and WhatsApp bot; feedback to the reporter when the page is blocked</li>
+          <li><b>Scale:</b> all CT logs, registrar zone feeds, paid-search and social-ad monitoring</li></ul></div>
+  </div>
+  <div class="cols cols-3" style="margin-top:32px">
+    <div class="stat"><div class="v gold" style="font-size:40px">Operate</div><div class="l">one national node (Cyber Security Council / TDRA); each entity’s SOC sees its own cases and gallery</div></div>
+    <div class="stat"><div class="v gold" style="font-size:40px">Measure</div><div class="l">time-to-identify and exposure per case, anchored on public log timestamps — the challenge KPIs, continuously</div></div>
+    <div class="stat"><div class="v gold" style="font-size:40px">Extend</div><div class="l">same pipeline for fake apps, ads and social accounts: new sensors, same verification and response</div></div>
+  </div>
+  <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>13</span></div>
+</section>
+
+<!-- 14 · Closing --------------------------------------------------------------------------------------- -->
+<section class="slide" style="justify-content:center">
+  <div class="kicker">Live demo</div>
+  <div class="big-title" style="font-size:96px">Catch them while they set up.<br>Block them everywhere with one click.</div>
+  <div class="cols cols-3" style="margin-top:56px">
+    <div class="card"><h3><span class="n">1</span>Watch the feed</h3><p>a certificate for <span class="mono">rta-fines-refund.com</span> appears in the live ticker and lights up</p></div>
+    <div class="card"><h3><span class="n">2</span>Seconds later</h3><p>verified as a clone collecting card, CVV and OTP; evidence sealed; the SMS lure arrives and joins the campaign</p></div>
+    <div class="card"><h3><span class="n">3</span>One click</h3><p>seven channels dispatched, telecom block acknowledged, exposure measured — a gym site with the same word is cleared, a parked domain is caught when it goes live</p></div>
+  </div>
+  <div style="margin-top:60px;display:flex;justify-content:space-between;align-items:flex-end">
+    <div><div class="muted" style="font-size:20px;letter-spacing:.1em;text-transform:uppercase">Repository</div><div class="mono" style="font-size:30px;margin-top:8px">github.com/stevestrobert/saqr</div></div>
+    <div style="text-align:right"><div class="hero-tag" style="margin:0">SAQR <span class="ar gold">صقر</span> · NYU Abu Dhabi · hackathon.ae 2026</div><div class="ar" style="font-size:34px;color:var(--gold);margin-top:14px">شكراً</div></div>
+  </div>
+  <div class="footer"><span class="brand"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#10161e"/><path d="M6 20c3-1 6-4 7-9 1 3 1 6-1 9 3-1 5-3 6-7 2 3 1 7-2 9 4 0 7-1 10-4-1 4-5 8-11 8-5 0-8-3-9-6z" fill="#e3b341"/></svg>SAQR · hackathon.ae 2026</span><span>14</span></div>
+</section>
+
+</body>
+</html>
