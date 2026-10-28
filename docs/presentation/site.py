@@ -1,9 +1,12 @@
-"""Assemble the public static site (landing page, web deck, PDF, presenter notes) into var/site/.
+"""Assemble the public static site into var/site/ (deployed to Cloudflare Pages by .github/workflows/pages.yml):
 
-    python docs/presentation/site.py            -> var/site/   (deployed to Cloudflare Pages by .github/workflows/pages.yml)
+    /                 landing page
+    /presentation/    web deck (+ PDFs, script, presenter notes)
+    /app/             the dashboard, server-less: frontend/dist-static + a recorded run from `saqr snapshot` (var/snapshot)
 
-The dashboard itself is not part of the site: it needs the SAQR node (`make demo`). Slide 11 of the deck therefore
-shows a screenshot when served from Pages and embeds the live dashboard only when the deck is served by the node.
+    python docs/presentation/site.py
+
+The live node (real pipeline) is deployed separately to Fly.io by .github/workflows/fly.yml.
 """
 from __future__ import annotations
 
@@ -23,14 +26,16 @@ a.btn{display:inline-block;margin:10px 12px 0 0;padding:14px 22px;border-radius:
 a.btn.gold{background:#f2b544;color:#1a1200;border-color:#f2b544}small{display:block;margin-top:28px;color:#8593ab}code{font-family:ui-monospace,monospace}</style></head><body><main>
 <h1>SAQR <span>صقر</span></h1>
 <p>Early warning and one-click takedown for impersonated government financial services. hackathon.ae 2026 · Digital Trust &amp; Cyber-Secure Nation · NYU Abu Dhabi student team.</p>
-<a class="btn gold" href="/presentation/">Slide deck · 3 min</a>
+<a class="btn gold" href="https://saqr-hackathon.fly.dev/">Live node · dashboard</a>
+<a class="btn gold" href="/app/">Dashboard · recorded run</a>
+<a class="btn" href="/presentation/">Slide deck · 3 min</a>
 <a class="btn" href="/presentation/?full=1">Full deck · 13 slides</a>
 <a class="btn" href="/presentation/SAQR-pitch.pdf">PDF · 3 min</a>
 <a class="btn" href="/presentation/SAQR-pitch-full.pdf">PDF · full</a>
 <a class="btn" href="/presentation/script-3min.md">Script · 3 min</a>
 <a class="btn" href="/presentation/presenter-notes.md">Presenter notes</a>
 <a class="btn" href="https://github.com/stevestrobert/saqr">Source code</a>
-<small>Deck keys: → next · ← back · N presenter notes · F fullscreen. The live dashboard runs locally with <code>make demo</code>.</small>
+<small>The live node runs the real pipeline on Fly.io (scripted scam wave, isolated browser, evidence, one-click block). The recorded run is the same dashboard without a server, replaying a captured run. Deck keys: → next · ← back · N presenter notes · F fullscreen.</small>
 </main></body></html>
 """
 
@@ -54,8 +59,15 @@ def main() -> None:
     images.mkdir()
     for name in ("evidence-report.png", "live-wall.png", "case.png", "approve-modal.png"):
         shutil.copy(REPO / "docs" / "images" / name, images / name)
+    # the dashboard itself, server-less: static bundle + a recorded run (see saqr/demo/snapshot.py)
+    dist_static, snapshot = REPO / "frontend" / "dist-static", REPO / "var" / "snapshot"
+    if dist_static.exists() and (snapshot / "events.json").exists():
+        shutil.copytree(dist_static, OUT / "app")
+        shutil.copytree(snapshot, OUT / "app" / "data")
+    else:
+        print("note: frontend/dist-static or var/snapshot missing (npm run build:static · saqr snapshot); no /app", file=sys.stderr)
     (OUT / "index.html").write_text(LANDING)
-    (OUT / "_redirects").write_text("/deck  /presentation/  302\n")
+    (OUT / "_redirects").write_text("/deck  /presentation/  302\n/app/*  /app/index.html  200\n")
     (OUT / "_headers").write_text("/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n")
     n = sum(1 for p in OUT.rglob("*") if p.is_file())
     print(f"{n} files in {OUT}")

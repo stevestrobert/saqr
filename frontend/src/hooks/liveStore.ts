@@ -1,4 +1,5 @@
 import { api } from '../api/client';
+import { STATIC, replay } from '../api/staticBackend';
 import type {
   Action,
   AuditEntry,
@@ -198,16 +199,26 @@ export class LiveStore {
     this.patch({ demo });
   }
 
+  setConnection(connection: ConnectionState) {
+    this.patch({ connection, reconnectAttempt: 0 });
+  }
+
   // ------------------------------------------------------------------------------------ websocket
   connect(url: string) {
     this.url = url;
     this.stopped = false;
+    if (STATIC) {
+      // Hosted replay: the recorded event stream stands in for the socket.
+      this.reconnectTimer = window.setTimeout(() => replay.attach(this), 0);
+      return;
+    }
     // Deferred by a tick so a mount that is immediately unmounted (React StrictMode) never opens a socket.
     this.reconnectTimer = window.setTimeout(() => this.open(), 0);
   }
 
   disconnect() {
     this.stopped = true;
+    if (STATIC) replay.detach();
     if (this.reconnectTimer) window.clearTimeout(this.reconnectTimer);
     this.reconnectTimer = null;
     if (this.flushTimer) window.clearTimeout(this.flushTimer);

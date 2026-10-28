@@ -26,6 +26,7 @@ import type {
   CaseState,
   CandidateStatus,
 } from './types';
+import { STATIC, staticRequest, staticUrls } from './staticBackend';
 
 export class ApiError extends Error {
   status: number;
@@ -41,6 +42,7 @@ export class ApiError extends Error {
 const BASE = '/api';
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  if (STATIC) return staticRequest<T>(path, init);
   let res: Response;
   try {
     res = await fetch(BASE + path, {
@@ -123,7 +125,7 @@ export const api = {
 };
 
 // URL helpers for binary resources (images, downloads) — not fetched as JSON.
-export const urls = {
+const liveUrls = {
   screenshot: (caseId: string, view: 'desktop' | 'mobile' = 'desktop', thumb = false) =>
     `${BASE}/cases/${encodeURIComponent(caseId)}/screenshot${qs({ view, thumb: thumb ? 1 : 0 })}`,
   evidenceZip: (caseId: string) => `${BASE}/cases/${encodeURIComponent(caseId)}/evidence.zip`,
@@ -131,6 +133,9 @@ export const urls = {
   evidenceArtifact: (caseId: string, name: string) =>
     `${BASE}/cases/${encodeURIComponent(caseId)}/evidence/${encodeURIComponent(name)}`,
   galleryScreenshot: (refId: string) => `${BASE}/gallery/${encodeURIComponent(refId)}/screenshot`,
+};
+export const urls = {
+  ...(STATIC ? staticUrls : liveUrls),
   websocket: () => {
     const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
     return `${proto}://${window.location.host}/ws`;

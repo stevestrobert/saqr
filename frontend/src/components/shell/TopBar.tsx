@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { Cpu, Plug, Presentation, Radio, Wifi, WifiOff } from 'lucide-react';
+import { Cpu, Film, Plug, Presentation, Radio, Wifi, WifiOff } from 'lucide-react';
+import { STATIC } from '../../api/staticBackend';
 import { useLive } from '../../hooks/useLiveEvents';
 import { fmtInt } from '../../lib/format';
 
@@ -30,7 +31,8 @@ export function TopBar({ onPresenter, presenterOpen }: { onPresenter: () => void
           ? 'CT replay · synthetic'
           : 'CT feed';
   const connTone = connection === 'connected' ? 'text-emerald' : connection === 'offline' ? 'text-red' : 'text-amber';
-  const connText = connection === 'connected' ? 'Live' : connection === 'connecting' ? 'Connecting' : connection === 'offline' ? 'Offline' : `Reconnecting${attempt > 1 ? ` (${attempt})` : ''}`;
+  const connText =
+    connection === 'connected' ? (STATIC ? 'Replay' : 'Live') : connection === 'connecting' ? 'Connecting' : connection === 'offline' ? 'Offline' : `Reconnecting${attempt > 1 ? ` (${attempt})` : ''}`;
 
   return (
     <header className="h-12 shrink-0 border-b border-line bg-surface/60 backdrop-blur flex items-center gap-2 px-4">
@@ -55,6 +57,15 @@ export function TopBar({ onPresenter, presenterOpen }: { onPresenter: () => void
       </div>
 
       <div className="ml-auto flex items-center gap-2 shrink-0 whitespace-nowrap">
+        {STATIC && (
+          <span
+            className="inline-flex items-center gap-1.5 h-6 px-2 rounded-md text-[11.5px] bg-sky/10 text-sky border border-sky/25"
+            title="Hosted copy without a server: a recorded run of the real node is replayed. Approve & block fast-forwards the recorded dispatch; other writes need the live node (make demo)."
+          >
+            <Film className="size-3.5" />
+            recorded run · replay
+          </span>
+        )}
         {demo?.running && (
           <span className="inline-flex items-center gap-1.5 h-6 px-2 rounded-md text-[11.5px] bg-gold/10 text-gold border border-gold/25" title="Scripted demo scenario is running">
             <span className="size-1.5 rounded-full bg-gold animate-pulse-soft" />
