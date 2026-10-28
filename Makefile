@@ -1,4 +1,4 @@
-.PHONY: setup demo demo-live serve test lint frontend deck deck-pdf docker watch clean
+.PHONY: setup demo demo-live serve test lint frontend deck deck-pdf site docker watch clean
 
 PY ?= python3
 VENV ?= .venv
@@ -36,6 +36,9 @@ deck:             ## render slide previews of the web deck (docs/presentation/in
 
 deck-pdf:         ## export the web deck to docs/presentation/SAQR-pitch.pdf
 	$(BIN)/python docs/presentation/build.py --pdf
+
+site: deck-pdf    ## assemble the public static site (landing page, deck, PDF, notes) in var/site — deployed by .github/workflows/pages.yml
+	$(BIN)/python docs/presentation/site.py
 
 docker:           ## build and run with Docker Compose
 	docker compose up --build

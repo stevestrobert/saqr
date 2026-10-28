@@ -123,7 +123,9 @@ Further reading: [`docs/architecture.md`](docs/architecture.md) · [`docs/api.md
 the node runs — then slide 11 embeds the live dashboard). Keys: `→`/`space`, `←`, `N` presenter notes, `F` fullscreen,
 `?` help. The presenter script with timing, the demo click-script and a Q&A crib is in
 [`docs/presentation/presenter-notes.md`](docs/presentation/presenter-notes.md). `make deck` renders slide previews;
-`python docs/presentation/build.py --pdf` exports a PDF if a file is needed.
+`make deck-pdf` exports a PDF. `make site` assembles a public static site (landing page, deck, PDF, notes) in `var/site`,
+and `.github/workflows/pages.yml` deploys it to Cloudflare Pages on every push that touches `docs/` — set the repository
+secrets `CLOUDFLARE_API_TOKEN` (Pages: Edit) and `CLOUDFLARE_ACCOUNT_ID` to enable it.
 
 ## More screenshots
 
