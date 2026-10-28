@@ -1,0 +1,38 @@
+# Fly.io deployment of the SAQR node (pipeline + API + dashboard) — see .github/workflows/fly.yml.
+# One always-on 2 GB machine: Chromium needs the memory; the scripted demo keeps running between visits.
+
+app = "saqr-hackathon"
+primary_region = "fra"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  SAQR_CT_SOURCE = "replay"          # "hybrid" = real Certificate Transparency logs with the demo domains injected
+  SAQR_DEMO_SPEED = "1.0"
+  SAQR_CONNECTOR_MODE = "simulate"
+  SAQR_VISUAL_ENCODER = "perceptual"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [http_service.concurrency]
+    type = "connections"
+    hard_limit = 250
+    soft_limit = 150
+
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "90s"
+    method = "GET"
+    path = "/api/status"
+
+[[vm]]
+  memory = "2gb"
+  cpu_kind = "shared"
+  cpus = 2

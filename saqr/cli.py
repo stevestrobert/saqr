@@ -241,6 +241,17 @@ def audit_verify() -> None:
 
 
 @cli.command()
+def snapshot(out: Path = typer.Argument(Path("var/snapshot")), url_base: str = typer.Option("/app/data", help="URL prefix the static dashboard serves the files from"),
+             speed: float = typer.Option(1.0), actor: str = typer.Option("Demo analyst")) -> None:
+    """Record a full demo run (events, API answers, screenshots, evidence) for the server-less hosted dashboard."""
+    _logging("info")
+    from .demo.snapshot import record
+
+    s = record(out.resolve(), url_base=url_base, speed=speed, actor=actor)
+    rprint(f"[bold green]snapshot[/] {out}: {s['events']} events ({s['certs']} certificates), {s['cases']} cases, approved {len(s['approved'])}, {s['duration_s']} s")
+
+
+@cli.command()
 def report(text: str, channel: str = typer.Option("sms"), sender: str = typer.Option(""), server: str = typer.Option("http://localhost:8000")) -> None:
     """Forward a suspicious message to a running SAQR node (simulates the citizen reporting number)."""
     import httpx
