@@ -98,6 +98,9 @@ re-verify it offline with `saqr evidence verify <dir>` or with `sha256sum` and `
   ([`docs/metrics.md`](docs/metrics.md)), to be replaced by the organisers' historical data.
 * **Privacy:** SAQR looks only at what scammers publish (certificates, public pages). Reporter numbers are masked and
   hashed, identifiers in forwarded texts are scrubbed before storage, no citizen browsing data is touched.
+* **Access control:** the MVP has no authentication; the analyst identity on an approval is self-declared. A
+  deployment sits behind the entity's SSO (UAE PASS for analysts) and a reverse proxy; the audit chain records whatever
+  identity the proxy asserts.
 
 ## Repository
 
