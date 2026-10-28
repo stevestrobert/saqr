@@ -12,7 +12,7 @@ Click once per slide; the animations run by themselves.
 | 4 | Assess | Each candidate opens in a throw-away browser. SAQR compares it with the real page, finds the copied emblem, reads the text, and reads what the form asks for — official portals never ask for a card or an OTP on an inquiry page. Four signals fuse into a risk score with reasons in plain language: here 90 out of 100, confirmed fake. The same step clears false positives, like a gym with "rta" in its name. And the evidence package is sealed automatically: screenshots, code, DNS, certificate, hashes, Merkle root, trusted timestamp. | 1:45 |
 | 5 | Respond | Then one click. A named analyst approves, and the request fans out to seven partners at once: telecoms block the URL and filter the SMS, browsers warn, the registrar and host take the site down, banks freeze the accounts on the page, the CA revokes the certificate, aeCERT gets the incident. The safeguards are in code: official domains are allow-listed and re-checked at dispatch, nothing goes out without a human, and every step is in a hash-chained audit log. | 2:20 |
 | 6 | Results | In the demo the pipeline takes seconds to identify and about three minutes to block, including the human. Against a complaint-driven baseline of nine hours and a takedown baseline of forty-eight, that is far past the 70 and 50 percent targets. The baselines are assumptions we want to replace with your historical cases, and the partner connectors are simulated in this build. | 2:45 |
-| 7 | Close | Catch them while they set up. Block them everywhere with one click. We are asking for historical cases and an introduction to one telecom operator. Thank you. | 2:55 |
+| 7 | Close | Catch them while they set up. Block them everywhere with one click. The live system, the deck and the code are at saqr-hackathon.pages.dev. We are asking for historical cases and an introduction to one telecom operator. Thank you. | 2:57 |
 
 If you are running over at slide 4, drop the last sentence of slides 4 and 5 (evidence list, safeguards) — they come
 back in Q&A anyway.
@@ -40,5 +40,6 @@ back in Q&A anyway.
 * **What do you need?** The organisers' historical cases to replace our baselines, and an introduction to TDRA and one
   operator to wire the first real connector.
 
-Backup if a judge wants to see it: the dashboard runs locally (`make demo`, `http://localhost:8000`), and the 13-slide
-version of the deck is at `?full=1` (slide 11 embeds the live dashboard).
+Backup if a judge wants to see it: the live node runs at https://saqr-hackathon.fly.dev (real pipeline, scripted scam
+wave, press `P` for the presenter drawer), the server-less recorded run is at https://saqr-hackathon.pages.dev/app/,
+and locally `make demo` gives the same at `http://localhost:8000`. The 13-slide deck is at `?full=1`.

@@ -100,8 +100,49 @@ class Replayer {
     void this.ready().then(() => {
       if (this.store !== store) return;
       store.setConnection('connected');
+      // A reload or a deep link continues where this browser left off instead of restarting the run.
+      const saved = this.restore();
+      if (saved) {
+        this.speed = saved.speed;
+        this.seek(saved.offsetMs);
+      }
       this.start();
     });
+  }
+
+  private static KEY = 'saqr.replay';
+  private lastSave = 0;
+
+  private persist(force = false) {
+    const now = Date.now();
+    if (!force && now - this.lastSave < 1000) return;
+    this.lastSave = now;
+    try {
+      localStorage.setItem(Replayer.KEY, JSON.stringify({ offsetMs: this.elapsedMs(), speed: this.speed }));
+    } catch {
+      /* private mode or storage disabled: the run simply restarts on reload */
+    }
+  }
+
+  private restore(): { offsetMs: number; speed: number } | null {
+    try {
+      const raw = localStorage.getItem(Replayer.KEY);
+      if (!raw) return null;
+      const v = JSON.parse(raw) as { offsetMs?: number; speed?: number };
+      if (typeof v.offsetMs !== 'number' || v.offsetMs <= 0) return null;
+      return { offsetMs: v.offsetMs, speed: typeof v.speed === 'number' && v.speed > 0 ? v.speed : DEFAULT_SPEED };
+    } catch {
+      return null;
+    }
+  }
+
+  /** Deliver everything up to `offsetMs` of scenario time at once (used after a reload). */
+  private seek(offsetMs: number) {
+    while (this.idx < this.events.length && Date.parse(this.events[this.idx].at) - this.t0 <= offsetMs) {
+      this.deliver(this.idx);
+      this.idx += 1;
+    }
+    this.offsetMs = Math.min(offsetMs, this.events.length ? Date.parse(this.events[this.events.length - 1].at) - this.t0 : 0);
   }
 
   detach() {
@@ -133,12 +174,18 @@ class Replayer {
     this.offsetMs = this.elapsedMs();
     this.startedWall = Date.now();
     this.speed = s;
+    this.persist(true);
   }
 
   reset() {
     this.stop();
     this.idx = 0;
     this.offsetMs = 0;
+    try {
+      localStorage.removeItem(Replayer.KEY);
+    } catch {
+      /* ignore */
+    }
     this.delivered.clear();
     this.certs = [];
     this.candidates.clear();
@@ -161,6 +208,7 @@ class Replayer {
       this.deliver(this.idx);
       this.idx += 1;
     }
+    this.persist();
     if (this.idx >= this.events.length) this.stop();
   }
 
