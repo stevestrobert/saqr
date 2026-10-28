@@ -140,4 +140,7 @@ secrets `CLOUDFLARE_API_TOKEN` (Pages: Edit) and `CLOUDFLARE_ACCOUNT_ID` to enab
 
 ## Team
 
-NYU Abu Dhabi student team, hackathon.ae 2026. MIT licence.
+**Falcon Rush** — NYU Abu Dhabi student team, hackathon.ae 2026. MIT licence.
+
+Live: [saqr-hackathon.pages.dev](https://saqr-hackathon.pages.dev) (deck, PDF, server-less dashboard replay) ·
+[saqr-hackathon.fly.dev](https://saqr-hackathon.fly.dev) (the running node).

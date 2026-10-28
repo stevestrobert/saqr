@@ -125,8 +125,8 @@ integrations, model trained on historical cases, UAE PASS + national TSA, citize
 
 ## 13 · Close (15 s)
 
-"Catch them while they set up. Block them everywhere with one click." Point at the links: the live node at
-saqr-hackathon.fly.dev, everything else at saqr-hackathon.pages.dev. The ask: the organisers' historical cases to replace
+"Catch them while they set up. Block them everywhere with one click." Point at the one link, saqr-hackathon.pages.dev:
+the live system, the deck and the code are all behind it. The ask: the organisers' historical cases to replace
 our baselines, and an introduction to TDRA and one operator to wire the first real connector. شكراً.
 
 ---

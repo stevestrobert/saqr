@@ -9,7 +9,7 @@ description = "SAQR — early-warning and one-click takedown for impersonated go
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
-authors = [{ name = "SAQR team (NYUAD) — hackathon.ae 2026" }]
+authors = [{ name = "Falcon Rush (NYU Abu Dhabi) — hackathon.ae 2026" }]
 keywords = ["phishing", "certificate-transparency", "brand-impersonation", "takedown", "uae", "digital-trust"]
 dependencies = [
   "fastapi>=0.115",

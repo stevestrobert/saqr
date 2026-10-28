@@ -25,7 +25,7 @@ main{max-width:720px}h1{font-size:64px;margin:0;letter-spacing:-.02em}h1 span{co
 a.btn{display:inline-block;margin:10px 12px 0 0;padding:14px 22px;border-radius:12px;border:1px solid rgba(255,255,255,.12);color:#e8eef8;text-decoration:none;font-weight:600;background:#121c2e}
 a.btn.gold{background:#f2b544;color:#1a1200;border-color:#f2b544}small{display:block;margin-top:28px;color:#8593ab}code{font-family:ui-monospace,monospace}</style></head><body><main>
 <h1>SAQR <span>صقر</span></h1>
-<p>Early warning and one-click takedown for impersonated government financial services. hackathon.ae 2026 · Digital Trust &amp; Cyber-Secure Nation · NYU Abu Dhabi student team.</p>
+<p>Early warning and one-click takedown for impersonated government financial services. hackathon.ae 2026 · Digital Trust &amp; Cyber-Secure Nation · Team Falcon Rush, NYU Abu Dhabi.</p>
 <a class="btn gold" href="https://saqr-hackathon.fly.dev/">Live node · dashboard</a>
 <a class="btn gold" href="/app/">Dashboard · recorded run</a>
 <a class="btn" href="/presentation/">Slide deck · 3 min</a>
