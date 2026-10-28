@@ -1,6 +1,6 @@
 name: pages
 
-# Publishes the landing page, the web deck, its PDF export and the presenter notes to Cloudflare Pages.
+# Publishes the landing page, the web deck, its PDF exports and the presenter notes to Cloudflare Pages.
 # Needs two repository secrets: CLOUDFLARE_API_TOKEN (Pages: Edit) and CLOUDFLARE_ACCOUNT_ID.
 
 on:
@@ -18,26 +18,46 @@ env:
   PROJECT: saqr-hackathon
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright/python:v1.63.0-noble
     steps:
       - uses: actions/checkout@v5
-      - name: Export the deck to PDF
+      - name: Export the deck to PDF (3-minute cut and full version)
         run: |
           pip install "playwright>=1.63,<1.64"
           python docs/presentation/build.py --pdf
           python docs/presentation/build.py --pdf --full
       - name: Assemble the site
         run: python docs/presentation/site.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: var/site
+          include-hidden-files: true
+          if-no-files-found: error
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Secrets present?
         id: secrets
         env:
           HAS: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
         run: |
           echo "ok=$HAS" >> "$GITHUB_OUTPUT"
-          [ "$HAS" = "true" ] || echo "::notice::CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID not set — site assembled but not deployed"
+          [ "$HAS" = "true" ] || echo "::notice::CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID not set — site built but not deployed"
+      - uses: actions/download-artifact@v4
+        if: steps.secrets.outputs.ok == 'true'
+        with:
+          name: site
+          path: site
+      - uses: actions/setup-node@v5
+        if: steps.secrets.outputs.ok == 'true'
+        with:
+          node-version: 22
       - name: Create the Pages project if it does not exist
         if: steps.secrets.outputs.ok == 'true'
         env:
@@ -53,4 +73,4 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: npx --yes wrangler@4 pages deploy var/site --project-name="$PROJECT" --branch=main --commit-dirty=true
+        run: npx --yes wrangler@4 pages deploy site --project-name="$PROJECT" --branch=main --commit-dirty=true
