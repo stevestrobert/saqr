@@ -51,6 +51,7 @@ class Connector:
     channel: Channel
     name: str
     description: str
+    default_targets: list[str] = []   # who receives the request, before a case resolves the exact contact
     blocks_exposure = False
 
     def targets(self, case: Case, pkg: EvidencePackage | None) -> list[Target]:
@@ -76,6 +77,7 @@ class Connector:
 class RegistrarAbuseConnector(Connector):
     channel, name = Channel.registrar, "Registrar abuse desk"
     description = "Domain suspension request to the sponsoring registrar (abuse contact from RDAP), citing ICANN RAA 3.18 and UAE law."
+    default_targets = ["sponsoring registrar abuse desk (from RDAP)"]
 
     def targets(self, case, pkg):
         reg = (pkg.registration if pkg else {}) or {}
@@ -105,6 +107,7 @@ class RegistrarAbuseConnector(Connector):
 class HostingAbuseConnector(Connector):
     channel, name = Channel.hosting, "Hosting provider abuse desk"
     description = "Content takedown request to the hosting network (abuse contact from IP RDAP / ASN)."
+    default_targets = ["hosting provider abuse desk (from IP RDAP / ASN)"]
 
     def targets(self, case, pkg):
         hosts = (pkg.hosting.get("hosts") if pkg else None) or []
@@ -131,6 +134,7 @@ class HostingAbuseConnector(Connector):
 class TelecomBlockConnector(Connector):
     channel, name = Channel.telecom, "Telecom operators (e&, du, Virgin Mobile) via TDRA"
     description = "Network-level URL/domain block for mobile and fixed subscribers plus an SMS-filter signature for the campaign lure."
+    default_targets = ["e& (Etisalat) network security", "du network security", "TDRA national block list"]
     blocks_exposure = True
 
     def targets(self, case, pkg):
@@ -155,6 +159,7 @@ class TelecomBlockConnector(Connector):
 class BrowserBlocklistConnector(Connector):
     channel, name = Channel.browser, "Browser blocklists"
     description = "Reports to Google Safe Browsing, Microsoft SmartScreen and Apple/Tencent feeds so every major browser shows a red warning."
+    default_targets = ["Google Safe Browsing", "Microsoft SmartScreen"]
     blocks_exposure = True
 
     def targets(self, case, pkg):
@@ -176,6 +181,7 @@ class BrowserBlocklistConnector(Connector):
 class BankFreezeConnector(Connector):
     channel, name = Channel.bank, "Banks / CBUAE fraud desk"
     description = "Account-freeze and card-monitoring request for IBANs, wallets and phone numbers shown on the page (via the UAE Banks Federation fraud channel)."
+    default_targets = ["CBUAE / UBF fraud desk"]
 
     def targets(self, case, pkg):
         iocs = (pkg.iocs if pkg else case.iocs) or {}
@@ -200,6 +206,7 @@ class BankFreezeConnector(Connector):
 class CertificateRevocationConnector(Connector):
     channel, name = Channel.certificate_authority, "Issuing certificate authority"
     description = "Revocation / abuse report to the CA that issued the certificate (removes the padlock in browsers that check revocation)."
+    default_targets = ["issuing certificate authority (from the certificate)"]
 
     def targets(self, case, pkg):
         issuer = (pkg.certificate.get("issuer") if pkg else None) or (case.capture.tls.issuer if case.capture.tls else "") or "issuing CA"
@@ -223,6 +230,7 @@ class CertificateRevocationConnector(Connector):
 class NationalCertConnector(Connector):
     channel, name = Channel.national_cert, "aeCERT / Cyber Security Council"
     description = "Incident notification and IOC sharing with the national CERT and the imitated entity's security team."
+    default_targets = ["aeCERT incident intake", "imitated entity's security team"]
 
     def targets(self, case, pkg):
         ent = case.verdict.text.brand_mentions[0] if case.verdict.text.brand_mentions else "imitated entity"
@@ -253,7 +261,7 @@ def connectors_for(channels: list[Channel] | None) -> list[Connector]:
 
 def describe_connectors(mode: str) -> list[dict]:
     return [{"channel": c.channel.value, "name": c.name, "description": c.description, "mode": mode,
-             "blocks_exposure": c.blocks_exposure} for c in ALL_CONNECTORS]
+             "targets": list(c.default_targets), "blocks_exposure": c.blocks_exposure} for c in ALL_CONNECTORS]
 
 
 def now() -> datetime:
