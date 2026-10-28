@@ -86,7 +86,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 pipeline.gallery.load()
                 log.info("gallery built: %d reference pages", n)
             from ..demo.scenario import Scenario
-            scenario = Scenario(pipeline, settings.demo_sites_dir, REPO_DIR / "demo" / "scenario.yaml", settings.demo_speed)
+            scenario_path = settings.demo_sites_dir.parent / "scenario.yaml"
+            if not scenario_path.exists():
+                scenario_path = REPO_DIR / "demo" / "scenario.yaml"
+            scenario = Scenario(pipeline, settings.demo_sites_dir, scenario_path, settings.demo_speed)
             pipeline.scenario = scenario
         app.state.scenario = scenario
         await pipeline.start()

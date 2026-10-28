@@ -2,16 +2,16 @@
 FROM mcr.microsoft.com/playwright/python:v1.63.0-noble
 
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1 \
-    SAQR_HOST=0.0.0.0 SAQR_PORT=8000 SAQR_DATA_DIR=/data
+    SAQR_HOST=0.0.0.0 SAQR_PORT=8000 SAQR_DATA_DIR=/data \
+    SAQR_DEMO_SITES_DIR=/app/demo/sites SAQR_FRONTEND_DIST=/app/frontend/dist
 
 WORKDIR /app
-COPY pyproject.toml README.md ./
+COPY pyproject.toml README.md LICENSE ./
 COPY saqr ./saqr
-RUN pip install --no-cache-dir . && mkdir -p /data
-
 COPY demo ./demo
 COPY frontend/dist ./frontend/dist
 COPY docs ./docs
+RUN pip install --no-cache-dir -e . && mkdir -p /data
 
 EXPOSE 8000
 VOLUME ["/data"]
