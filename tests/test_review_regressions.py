@@ -47,7 +47,17 @@ def test_short_brands_do_not_match_inside_ordinary_words():
 
 def test_embedded_domain_test_is_bounded():
     m = LookalikeMatcher()
-    for d in ("menu.ae.cdn-host.com", "abu.ae.hosting.net", "smarta.ae.pages.dev", "karta.ae-shop.com"):
+    for d in ("menu.ae.cdn-host.com", "abu.ae.hosting.net", "smarta.ae.pages.dev", "karta.ae-shop.com", "dubai-aero.com", "www.dubai-aero.com"):
         assert not m.match(d).is_candidate, d
     assert m.match("rta.ae.secure-login.com").is_candidate
     assert m.match("www.rta.ae.evil.com").is_candidate
+    assert m.match("www-rta-ae.com").is_candidate and m.match("login-dubai-ae.com").is_candidate
+
+
+def test_digits_do_not_corrupt_tokenisation_but_still_catch_substitutions():
+    m = LookalikeMatcher()
+    assert not m.match("cedar82.com").is_candidate          # '8'->'b' must not turn 'cedar82' into 'darb'
+    assert not m.match("portal.cedar82.com").is_candidate
+    r = m.match("rt4-fines.com")
+    assert r.is_candidate and "rta" in r.tokens              # whole chunk 'rt4' spells the brand after mapping
+    assert m.match("m0i-fines.com").is_candidate

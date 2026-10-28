@@ -111,7 +111,7 @@ class LookalikeMatcher:
             flat_ok = len(flat) >= 5  # 'uae' (u.ae) is a cue, not an embedded domain
             # bounded on both sides: 'rta.ae.secure-login.com' yes, 'smarta.ae.pages.dev' no
             if (f".{pd}." in f".{skel}." and skel != pd) or \
-               f"{pd.replace('.', '-')}" in parts.label or (flat_ok and (f"www-{flat}" in skel or parts.label == flat or
+               f"-{pd.replace('.', '-')}-" in f"-{parts.label}-" or (flat_ok and (f"www-{flat}" in skel or parts.label == flat or
                parts.label.startswith(flat + "-") or parts.label.endswith("-" + flat))):
                 reasons.append(MatchReason(kind="embedded_domain", weight=W_EMBEDDED,
                                            detail=f"official domain {pd} embedded in the name"))
@@ -120,7 +120,9 @@ class LookalikeMatcher:
 
         # 3. Tokens ------------------------------------------------------------------------------
         tokens: list[str] = []
-        for chunk in coarse_tokens(parts.subdomain + "." + parts.label if parts.subdomain else parts.label):
+        # Tokenise the letters-only skeleton (digits kept: 'cedar82' must not become 'cedarb2' -> 'darb').
+        parts_l = split_domain(skeleton(unicode_domain, map_digits=False))
+        for chunk in coarse_tokens(parts_l.subdomain + "." + parts_l.label if parts_l.subdomain else parts_l.label):
             if chunk in self.vocab:
                 tokens.append(chunk)
                 continue
@@ -137,6 +139,11 @@ class LookalikeMatcher:
                 tokens.extend(seg)
             else:
                 tokens.append(chunk)
+        # Digit substitutions ('rt4', 'sal1k', 'm0i'): only whole chunks that spell a brand after mapping count.
+        for chunk in coarse_tokens(parts.subdomain + "." + parts.label if parts.subdomain else parts.label):
+            if chunk in self.brands and chunk not in tokens and len(chunk) >= 3:
+                tokens.append(chunk)
+
         # Hyphenated / split brands: 'dubai-police', 'e-dirham', 'uae-pass', 'emirates-post'
         joined: list[str] = []
         consumed: set[str] = set()

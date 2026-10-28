@@ -38,15 +38,19 @@ def to_unicode(domain: str) -> str:
     return ".".join(labels)
 
 
-def skeleton(text: str) -> str:
+def skeleton(text: str, map_digits: bool = True) -> str:
     """Map look-alike characters to the ASCII letters they imitate (Unicode TR39-style skeleton).
 
     'rtа.ae' (Cyrillic а) -> 'rta.ae';  'sаlik' -> 'salik';  'g00gle' -> 'google'.
+    With map_digits=False digits are kept ('cedar82' stays 'cedar82'), which is what tokenisation needs.
     """
     single, _ = _confusables()
     out = []
     for ch in unicodedata.normalize("NFKD", text.lower()):
         if unicodedata.combining(ch):
+            continue
+        if not map_digits and (ch.isdigit() or ch in "@$!"):
+            out.append(ch)
             continue
         out.append(single.get(ch, ch))
     return "".join(out)
@@ -95,7 +99,7 @@ def coarse_tokens(name: str) -> list[str]:
     return [t for t in _SPLIT_RE.split(name) if t]
 
 
-def segment(chunk: str, vocabulary: set[str], max_unknown_ratio: float = 0.34, min_piece: int = 2) -> list[str] | None:
+def segment(chunk: str, vocabulary: set[str], max_unknown_ratio: float = 0.25, min_piece: int = 2) -> list[str] | None:
     """Split a concatenated chunk ('rtafinesrefund') into vocabulary words ('rta','fines','refund').
 
     Dynamic programme minimising unknown characters then token count. Returns None when the best

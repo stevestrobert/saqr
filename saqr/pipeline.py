@@ -347,6 +347,10 @@ class Pipeline:
             self.bus.publish("case", case_summary(case, self.store, cand))
             self._stage(cand, "done", f"post-response re-check: {verdict.label.value}")
             return case
+        # reports may have been attached to the candidate while the browser was busy: merge from the store
+        fresh = self.store.get(Candidate, cand.id)
+        if fresh and fresh.report_ids:
+            cand.report_ids = list(dict.fromkeys(cand.report_ids + fresh.report_ids))
         if case is None:
             case = Case(candidate_id=cand.id, domain=cand.domain, url=cand.url, source=cand.source, detected_at=cand.first_seen,
                         issued_at=cand.issued_at, verdict=verdict, capture=cap, report_ids=list(cand.report_ids))
