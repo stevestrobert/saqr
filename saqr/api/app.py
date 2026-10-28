@@ -380,6 +380,15 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     # ------------------------------------------------------------------------------------------- static
     if settings.demo_sites_dir.exists():
         app.mount("/demo-sites", StaticFiles(directory=str(settings.demo_sites_dir), html=True), name="demo-sites")
+    docs_dir = REPO_DIR / "docs"
+    if (docs_dir / "presentation" / "index.html").exists():
+        # the pitch deck (docs/presentation) and its images; slide 11 embeds the live dashboard from the same origin
+        app.mount("/docs", StaticFiles(directory=str(docs_dir), html=True), name="docs")
+
+        @app.get("/deck", include_in_schema=False)
+        def deck():
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse("/docs/presentation/")
 
     dist = settings.frontend_dist
     if dist.exists() and (dist / "index.html").exists():

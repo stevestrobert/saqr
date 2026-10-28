@@ -115,8 +115,15 @@ tests/           90+ tests: matcher, CT leaf parsing (real log entries), forms/t
 ```
 
 Further reading: [`docs/architecture.md`](docs/architecture.md) · [`docs/api.md`](docs/api.md) ·
-[`docs/challenge-mapping.md`](docs/challenge-mapping.md) · pitch deck: [`docs/SAQR-pitch.pdf`](docs/SAQR-pitch.pdf)
-(source in `docs/presentation/`, rebuild with `make deck`).
+[`docs/challenge-mapping.md`](docs/challenge-mapping.md).
+
+## Pitch deck (web)
+
+`docs/presentation/index.html` is a self-contained web slide deck (open the file, or `http://localhost:8000/deck` while
+the node runs — then slide 11 embeds the live dashboard). Keys: `→`/`space`, `←`, `N` presenter notes, `F` fullscreen,
+`?` help. The presenter script with timing, the demo click-script and a Q&A crib is in
+[`docs/presentation/presenter-notes.md`](docs/presentation/presenter-notes.md). `make deck` renders slide previews;
+`python docs/presentation/build.py --pdf` exports a PDF if a file is needed.
 
 ## More screenshots
 
